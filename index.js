@@ -1,5 +1,5 @@
 // Require the necessary discord.js classes
-const { Client, Events, GatewayIntentBits } = require('discord.js');
+const { Client, Collection, Events, GatewayIntentBits } = require('discord.js');
 const { token } = require('./config.json');
 const fs = require('fs');
 const path = require('path');
@@ -10,8 +10,8 @@ const client = new Client({ intents: [
 ] });
 
 // Create commands
-// client.commands = new Collection();
-// client.cooldowns = new Collection();
+client.commands = new Collection();
+client.cooldowns = new Collection();
 
 // Get subfolders path
 const foldersPath = path.join(__dirname, 'commands');
@@ -40,6 +40,26 @@ for (const folder of commandFolders)
 		}
 	}
 }
+
+// Listen for slash commands
+client.on(Events.InteractionCreate, interaction => {
+	if (!interaction.isChatInputCommand()) return;
+	console.log(interaction);
+});
+
+// Listen for prefix commands
+client.on(Events.MessageCreate, message => {
+	if (message.author.bot) return;
+
+	const prefix = '.';
+
+	if (!message.content.startsWith(prefix)) return;
+
+	const args = message.content.slice(prefix.length).trim().split(/ +/);
+	const command = args.shift().toLowerCase();
+
+	console.log(message);
+});
 
 // When the client is ready, run this code (only once).
 // The distinction between `client: Client<boolean>` and `readyClient: Client<true>` is important for TypeScript developers.
