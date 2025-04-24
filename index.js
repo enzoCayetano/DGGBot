@@ -41,25 +41,23 @@ for (const folder of commandFolders)
 	}
 }
 
-// Listen for slash commands
-client.on(Events.InteractionCreate, interaction => {
-	if (!interaction.isChatInputCommand()) return;
-	console.log(interaction);
-});
+// Event handler
+const eventsPath = path.join(__dirname, 'events');
+const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
 
-// Listen for prefix commands
-client.on(Events.MessageCreate, message => {
-	if (message.author.bot) return;
-
-	const prefix = '.';
-
-	if (!message.content.startsWith(prefix)) return;
-
-	const args = message.content.slice(prefix.length).trim().split(/ +/);
-	const command = args.shift().toLowerCase();
-
-	console.log(message);
-});
+for (const file of eventFiles)
+{
+	const filePath = path.join(eventsPath, file);
+	const event = require(filePath);
+	if (event.once)
+	{
+		client.once(event.name, (...args) => event.execute(...args));
+	}
+	else
+	{
+		client.on(event.name, (...args) => event.execute(...args));
+	}
+}
 
 // When the client is ready, run this code (only once).
 // The distinction between `client: Client<boolean>` and `readyClient: Client<true>` is important for TypeScript developers.

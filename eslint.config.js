@@ -8,7 +8,6 @@ module.exports = [
 		},
 		rules: {
 			'arrow-spacing': ['warn', { before: true, after: true }],
-			'comma-dangle': ['error', 'always-multiline'],
 			'comma-style': 'error',
 			'dot-location': ['error', 'property'],
 			'handle-callback-err': 'off',
