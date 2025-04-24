@@ -24,7 +24,7 @@ module.exports = {
 
   async execute(interaction)
   {
-    const subcommand = interaction.options.getSubCommand();
+    const subcommand = interaction.options.getSubcommand();
 
     if (subcommand === 'create')
     {
