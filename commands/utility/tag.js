@@ -51,5 +51,13 @@ module.exports = {
 
       await interaction.showModal(modal);
     }
+    else if (subcommand === 'delete')
+    {
+      // delete tag
+    }
+    else if (subcommand === 'list')
+    {
+      // list tags
+    }
   }
 };
