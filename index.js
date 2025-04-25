@@ -3,7 +3,7 @@ require('dotenv').config();
 const { Client, Collection, Events, GatewayIntentBits } = require('discord.js');
 const fs = require('fs');
 const path = require('path');
-const db = require('./db');
+const connectDB = require('./db');
 
 // connect to database
 connectDB(); 

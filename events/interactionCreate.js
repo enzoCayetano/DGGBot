@@ -1,10 +1,29 @@
 const { Collection, Events } = require('discord.js');
+const Tag = require('../models/Tag');
 
 module.exports = {
 	name: Events.InteractionCreate,
 	async execute(interaction) {
-		if (!interaction.isChatInputCommand()) return;
+		// ---- HANDLE PREFIX COMMANDS ----
+		if (message.author.bot || !message.content.startsWith('.')) return;
 
+		// remove . prefix to retrieve tag name
+		const tagName = message.content.slice(1).toLowerCase();
+
+		try {
+			const tag = await Tag.findOne({ name: tagName });
+			if (!tag) {
+				// tag not found
+				return;
+			}
+
+			await message.channel.send(tag.description);
+		} catch (err) {
+			console.error('Error fetching tag:', err);
+			await message.channel.send('❌ There was an error fetching that tag.');
+		}
+
+		// ---- HANDLE SLASH COMMANDS ----
 		const command = interaction.client.commands.get(interaction.commandName);
 
 		if (!command) {
@@ -42,6 +61,36 @@ module.exports = {
 		} catch (error) {
 			console.error(`Error executing ${interaction.commandName}`);
 			console.error(error);
+		}
+
+		// ---- HANDLE MODALS ----
+		if (interaction.customId === 'createTagModal')
+		{
+			const name = interaction.fields.getTextInputValue('tagName').toLowerCase();
+			const description = interaction.fields.getTextInputValue('tagContent');
+
+			try
+			{
+				// check if tag exists
+				const existing = await Tag.findOne({ name });
+				if (existing)
+				{
+					return await interaction.reply({ content: `❌ A tag with the name \`${name}\` already exists.`, ephemeral: true });
+				}
+
+				await Tag.create({
+					name,
+					description,
+					createdBy: interaction.user.id,
+				});
+
+				await interaction.reply({ content: `✅ Tag \`${name}\` has been created!`, ephemeral: true });
+			}
+			catch (err)
+			{
+				console.error('Error creating tag:', err);
+				await interaction.reply({ content: '❌ Failed to create tag. Please try again later.', ephemeral: true });
+			}
 		}
 	},
 };
