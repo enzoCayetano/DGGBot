@@ -32,7 +32,7 @@ module.exports = {
       subcommand
         .setName('list')
         .setDescription('List all existing.')),
-  requiredRoles: ['1237571670261371011'],
+  requiredRoles: ['1237571670261371011', '1275018612922384455'],
   async execute(interaction)
   {
     const subcommand = interaction.options.getSubcommand();
