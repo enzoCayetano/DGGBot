@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, PermissionFlagsBits } = require('discord.js');
+const Tag = require('../../models/Tag');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -53,11 +54,27 @@ module.exports = {
     }
     else if (subcommand === 'delete')
     {
-      // delete tag
+      const name = interaction.options.getString('name').toLowerCase();
+      
+      const tag = await Tag.findOne({ name });
+      if (!tag)
+      {
+        return await interaction.reply({ content: `❌ Tag \`${name}\` not found.`, ephemeral: true });
+      }
+
+      await Tag.deleteOne({ name });
+      await interaction.reply({ content: `🗑️ Tag \`${name}\` has been deleted.`, ephemeral: true });
     }
     else if (subcommand === 'list')
     {
-      // list tags
+      const tags = await Tag.find({});
+      if (tags.length === 0)
+      {
+        return await interaction.reply({ content: 'There are no tags yet!', ephemeral: true });
+      }
+
+      const tagList = tags.map(tag => `• \`${tag.name}\``).join('\n');
+      await interaction.reply({ content: `📦 **Existing Tags:**\n${tagList}` });
     }
   }
 };
