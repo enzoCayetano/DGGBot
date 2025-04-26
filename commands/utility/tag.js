@@ -8,7 +8,7 @@ module.exports = {
     .addSubcommand(subcommand =>
       subcommand
         .setName('create')
-        .setDescription('Create a new tag.'))
+        .setDescription('Create a new tag.')
         .addStringOption(option => 
           option
             .setName('type')
@@ -18,7 +18,7 @@ module.exports = {
               { name: 'Simple', value: 'simple' },
               { name: 'Advanced', value: 'advanced' },
             )
-        )
+        ))
     .addSubcommand(subcommand =>
       subcommand
         .setName('delete')
@@ -36,6 +36,18 @@ module.exports = {
   async execute(interaction)
   {
     const subcommand = interaction.options.getSubcommand();
+
+    // check for role
+    const userHasRequiredRole = interaction.member.roles.cache.some(role =>
+      this.requiredRoles.includes(role.id)
+    );
+
+    if (['create', 'delete'].includes(subcommand) && !userHasRequiredRole) {
+      return interaction.reply({
+        content: '❌ You do not have permission to use this command.',
+        ephemeral: true,
+      });
+    }
 
     if (subcommand === 'create')
     {
@@ -129,7 +141,7 @@ module.exports = {
         if (tag.embed) 
         {
           return {
-            title: tag.embed.title || `Tag: ${tag.name}`,
+            title: tag.embed.title || `${tag.name}`,
             description: tag.description,
             color: parseInt(tag.embed.color?.replace(/^#/, ''), 16) || 0x5865F2,
             footer: tag.embed.footer ? { text: tag.embed.footer } : undefined,
