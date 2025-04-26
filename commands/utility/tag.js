@@ -22,7 +22,7 @@ module.exports = {
       subcommand
         .setName('list')
         .setDescription('List all existing.')),
-
+  requiredRoles: ['1237571670261371011'],
   async execute(interaction)
   {
     const subcommand = interaction.options.getSubcommand();
@@ -61,14 +61,14 @@ module.exports = {
       {
         return await interaction.reply({ 
           content: `❌ Tag \`${name}\` not found.`, 
-          flags: MessageFlags.Ephemeral,
+          ephemeral: true,
         });
       }
 
       await Tag.deleteOne({ name });
       await interaction.reply({ 
-        content: `🗑️ Tag \`${name}\` has been deleted.`, 
-        flags: MessageFlags.Ephemeral,
+        content: `🗑️ Tag \`${name}\` has been deleted.`,
+        ephemeral: true,
       });
     }
     else if (subcommand === 'list')
@@ -78,7 +78,7 @@ module.exports = {
       {
         return await interaction.reply({ 
           content: 'There are no tags yet!', 
-          flags: MessageFlags.Ephemeral,
+          ephemeral: true,
         });
       }
 

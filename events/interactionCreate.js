@@ -20,7 +20,7 @@ module.exports = {
 						{
 							return await interaction.reply({ 
 								content: `❌ A tag with the name \`${name}\` already exists.`, 
-								flags: MessageFlags.Ephemeral,
+								ephemeral: true,
 							});
 						}
 		
@@ -37,7 +37,7 @@ module.exports = {
 						console.error('Error creating tag:', err);
 						await interaction.reply({ 
 							content: '❌ Failed to create tag. Please try again later.', 
-							flags: MessageFlags.Ephemeral,
+							ephemeral: true,
 						});
 					}
 				}
@@ -52,6 +52,23 @@ module.exports = {
 				console.error(`No command matching ${interaction.commandName} was found.`);
 				return;
 			}
+
+		// handle role restrictions
+		const requiredRoles = command.requiredRoles || [];
+		if (requiredRoles.length > 0)
+		{
+			const hasRequiredRole = interaction.member.roles.cache.some(role =>
+				requiredRoles.includes(role.id)
+			);
+
+			if (!hasRequiredRole)
+			{
+				return interaction.reply({
+					content: '❌ Sorry, you don’t have permission to use this command.',
+					ephemeral: true,
+				});
+			}
+		}
 	
 			// COOLDOWNS
 			const { cooldowns } = interaction.client;
@@ -73,7 +90,7 @@ module.exports = {
 					const expiredTimestamp = Math.round(expirationTime / 1000);
 					return interaction.reply({ 
 						content: `Please wait, this command has a cooldown of \`${command.data.name}\`. You can use it again <t:${expiredTimestamp}:R>.`, 
-						flags: MessageFlags.Ephemeral,
+						ephemeral: true,
 					});
 				}
 			}
