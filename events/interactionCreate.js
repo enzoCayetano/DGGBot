@@ -18,7 +18,10 @@ module.exports = {
 						const existing = await Tag.findOne({ name });
 						if (existing)
 						{
-							return await interaction.reply({ content: `❌ A tag with the name \`${name}\` already exists.`, ephemeral: true });
+							return await interaction.reply({ 
+								content: `❌ A tag with the name \`${name}\` already exists.`, 
+								flags: MessageFlags.Ephemeral,
+							});
 						}
 		
 						await Tag.create({
@@ -32,7 +35,10 @@ module.exports = {
 					catch (err)
 					{
 						console.error('Error creating tag:', err);
-						await interaction.reply({ content: '❌ Failed to create tag. Please try again later.', ephemeral: true });
+						await interaction.reply({ 
+							content: '❌ Failed to create tag. Please try again later.', 
+							flags: MessageFlags.Ephemeral,
+						});
 					}
 				}
 		}
@@ -65,7 +71,10 @@ module.exports = {
 				if (now < expirationTime)
 				{
 					const expiredTimestamp = Math.round(expirationTime / 1000);
-					return interaction.reply({ content: `Please wait, this command has a cooldown of \`${command.data.name}\`. You can use it again <t:${expiredTimestamp}:R>.`, epheremal: true });
+					return interaction.reply({ 
+						content: `Please wait, this command has a cooldown of \`${command.data.name}\`. You can use it again <t:${expiredTimestamp}:R>.`, 
+						flags: MessageFlags.Ephemeral,
+					});
 				}
 			}
 	

@@ -59,18 +59,27 @@ module.exports = {
       const tag = await Tag.findOne({ name });
       if (!tag)
       {
-        return await interaction.reply({ content: `❌ Tag \`${name}\` not found.`, ephemeral: true });
+        return await interaction.reply({ 
+          content: `❌ Tag \`${name}\` not found.`, 
+          flags: MessageFlags.Ephemeral,
+        });
       }
 
       await Tag.deleteOne({ name });
-      await interaction.reply({ content: `🗑️ Tag \`${name}\` has been deleted.`, ephemeral: true });
+      await interaction.reply({ 
+        content: `🗑️ Tag \`${name}\` has been deleted.`, 
+        flags: MessageFlags.Ephemeral,
+      });
     }
     else if (subcommand === 'list')
     {
       const tags = await Tag.find({});
       if (tags.length === 0)
       {
-        return await interaction.reply({ content: 'There are no tags yet!', ephemeral: true });
+        return await interaction.reply({ 
+          content: 'There are no tags yet!', 
+          flags: MessageFlags.Ephemeral,
+        });
       }
 
       const tagList = tags.map(tag => `• \`${tag.name}\``).join('\n');
