@@ -8,39 +8,82 @@ module.exports = {
 		if (interaction.isModalSubmit())
 		{
 			if (interaction.customId === 'createTagModal')
+			{
+				const name = interaction.fields.getTextInputValue('tagName').toLowerCase();
+				const description = interaction.fields.getTextInputValue('tagContent');
+	
+				try
 				{
-					const name = interaction.fields.getTextInputValue('tagName').toLowerCase();
-					const description = interaction.fields.getTextInputValue('tagContent');
-		
-					try
+					// check if tag exists
+					const existing = await Tag.findOne({ name });
+					if (existing)
 					{
-						// check if tag exists
-						const existing = await Tag.findOne({ name });
-						if (existing)
-						{
-							return await interaction.reply({ 
-								content: `❌ A tag with the name \`${name}\` already exists.`, 
-								ephemeral: true,
-							});
-						}
-		
-						await Tag.create({
-							name,
-							description,
-							createdBy: interaction.user.id,
-						});
-		
-						await interaction.reply({ content: `✅ Tag \`${name}\` has been created!`, ephemeral: true });
-					}
-					catch (err)
-					{
-						console.error('Error creating tag:', err);
-						await interaction.reply({ 
-							content: '❌ Failed to create tag. Please try again later.', 
+						return await interaction.reply({ 
+							content: `❌ A tag with the name \`${name}\` already exists.`, 
 							ephemeral: true,
 						});
 					}
+	
+					await Tag.create({
+						name,
+						description,
+						createdBy: interaction.user.id,
+					});
+	
+					await interaction.reply({ content: `✅ Tag \`${name}\` has been created!`, ephemeral: true });
 				}
+				catch (err)
+				{
+					console.error('Error creating tag:', err);
+					await interaction.reply({ 
+						content: '❌ Failed to create tag. Please try again later.', 
+						ephemeral: true,
+					});
+				}
+			}
+
+			if (interaction.customId === 'createTagModalAdvanced') 
+			{
+				try {
+					const name = interaction.fields.getTextInputValue('tagName').toLowerCase();
+					const content = interaction.fields.getTextInputValue('tagContent');
+					const embedTitle = interaction.fields.getTextInputValue('embedTitle') || null;
+					const embedColor = interaction.fields.getTextInputValue('embedColor') || null;
+					const footer = interaction.fields.getTextInputValue('embedFooter') || null;
+			
+					// check if tag exists
+					const existing = await Tag.findOne({ name });
+					if (existing) {
+						return await interaction.reply({ 
+							content: `❌ A tag with the name \`${name}\` already exists.`, 
+							ephemeral: true 
+						});
+					}
+			
+					// Store tag with embed info
+					await Tag.create({ 
+						name, 
+						description: content,
+						embed: {
+							title: embedTitle,
+							color: embedColor,
+							footer: footer
+						}
+					});
+			
+					await interaction.reply({ 
+						content: `🎨 Advanced tag \`${name}\` created with embed options.`, 
+						ephemeral: true 
+					});
+				}
+				catch (err) {
+					console.error('Error creating advanced tag:', err);
+					await interaction.reply({ 
+						content: '❌ Failed to create advanced tag. Please try again later.', 
+						ephemeral: true 
+					});
+				}
+			}
 		}
 
 		// ---- HANDLE SLASH COMMANDS ----

@@ -9,6 +9,16 @@ module.exports = {
       subcommand
         .setName('create')
         .setDescription('Create a new tag.'))
+        .addStringOption(option => 
+          option
+            .setName('type')
+            .setDescription('Choose between simple or advanced tag creation.')
+            .setRequired(true)
+            .addChoices(
+              { name: 'Simple', value: 'simple' },
+              { name: 'Advanced', value: 'advanced' },
+            )
+        )
     .addSubcommand(subcommand =>
       subcommand
         .setName('delete')
@@ -29,9 +39,11 @@ module.exports = {
 
     if (subcommand === 'create')
     {
+      const type = interaction.options.getString('type');
+
       const modal = new ModalBuilder()
-        .setCustomId('createTagModal')
-        .setTitle('Create New Tag');
+        .setCustomId(type === 'simple' ? 'createTagModal' : 'createTagModalAdvanced')
+        .setTitle(type === 'simple' ? 'Create New Tag' : 'Advanced Tag Creator');
 
       const tagNameInput = new TextInputBuilder()
         .setCustomId('tagName')
@@ -45,10 +57,39 @@ module.exports = {
         .setStyle(TextInputStyle.Paragraph)
         .setRequired(true);
 
-      modal.addComponents(
-        new ActionRowBuilder().addComponents(tagNameInput),
-        new ActionRowBuilder().addComponents(tagContentInput)
-      );
+      modal.addComponents(new ActionRowBuilder().addComponents(tagNameInput));
+
+      if (type === 'simple')
+      {
+        modal.addComponents(new ActionRowBuilder().addComponents(tagContentInput));
+      }
+      else
+      {
+        const embedTitleInput = new TextInputBuilder()
+          .setCustomId('embedTitle')
+          .setLabel('Embed Title (optional)')
+          .setStyle(TextInputStyle.Short)
+          .setRequired(false);
+
+          const embedColorInput = new TextInputBuilder()
+          .setCustomId('embedColor')
+          .setLabel('Embed Color (hex, optional)')
+          .setStyle(TextInputStyle.Short)
+          .setRequired(false);
+    
+        const footerInput = new TextInputBuilder()
+          .setCustomId('embedFooter')
+          .setLabel('Footer text (optional)')
+          .setStyle(TextInputStyle.Short)
+          .setRequired(false);
+    
+        modal.addComponents(
+          new ActionRowBuilder().addComponents(tagContentInput),
+          new ActionRowBuilder().addComponents(embedTitleInput),
+          new ActionRowBuilder().addComponents(embedColorInput),
+          new ActionRowBuilder().addComponents(footerInput)
+        );
+      }
 
       await interaction.showModal(modal);
     }
@@ -71,19 +112,41 @@ module.exports = {
         ephemeral: true,
       });
     }
-    else if (subcommand === 'list')
+    else if (subcommand === 'list') 
     {
       const tags = await Tag.find({});
-      if (tags.length === 0)
+      
+      if (tags.length === 0) 
       {
-        return await interaction.reply({ 
-          content: 'There are no tags yet!', 
+        return await interaction.reply({
+          content: 'There are no tags yet!',
           ephemeral: true,
         });
       }
-
-      const tagList = tags.map(tag => `• \`${tag.name}\``).join('\n');
-      await interaction.reply({ content: `📦 **Existing Tags:**\n${tagList}` });
+    
+      // Build a list of embed previews
+      const embeds = tags.map(tag => {
+        if (tag.embed) 
+        {
+          return {
+            title: tag.embed.title || `Tag: ${tag.name}`,
+            description: tag.description,
+            color: parseInt(tag.embed.color?.replace(/^#/, ''), 16) || 0x5865F2,
+            footer: tag.embed.footer ? { text: tag.embed.footer } : undefined,
+          };
+        } 
+        else 
+        {
+          return {
+            title: `Tag: ${tag.name}`,
+            description: tag.description,
+            color: 0x2F3136,
+          };
+        }
+      });
+    
+      // If too many embeds, paginate or trim — for now just send them in one message
+      return await interaction.reply({ embeds, ephemeral: true });
     }
   }
 };

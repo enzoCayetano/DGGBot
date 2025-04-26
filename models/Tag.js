@@ -17,6 +17,11 @@ const tagSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
+  },
+  embed: {
+    title: { type: String, default: null },
+    color: { type: String, default: null },
+    footer: { type: String, default: null }
   }
 });
 
