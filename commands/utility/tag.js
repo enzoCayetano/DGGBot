@@ -42,12 +42,16 @@ module.exports = {
       this.requiredRoles.includes(role.id)
     );
 
-    if (['create', 'delete'].includes(subcommand) && !userHasRequiredRole) {
+    // check if role is in server
+    if (
+      ['create', 'delete'].includes(subcommand) &&
+      (!interaction.guild || !interaction.member?.roles)
+    ) {
       return interaction.reply({
-        content: '❌ You do not have permission to use this command.',
-        ephemeral: true,
+        content: '❌ You must use this command in a server.',
+        ephemeral: true
       });
-    }
+    }    
 
     if (subcommand === 'create')
     {
