@@ -14,7 +14,7 @@ module.exports = {
     const tag = await Tag.findOne({ name: commandName });
     if (tag)
     {
-      if (tag.embed)
+      if (tag.embed && tag.embed.title)
       {
         const embed = {
           description: tag.description,
