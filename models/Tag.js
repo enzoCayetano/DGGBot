@@ -10,6 +10,11 @@ const tagSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  type: { 
+    type: String, 
+    enum: ['simple', 'advanced'], 
+    required: true 
+  },
   createdBy: {
     type: String,
     required: true

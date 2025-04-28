@@ -23,6 +23,7 @@ module.exports = {
           await Tag.create({
             name,
             description,
+            type: 'simple',
             createdBy: interaction.user.id,
           });
 
@@ -57,6 +58,7 @@ module.exports = {
           await Tag.create({
             name,
             description: content,
+            type: 'advanced',
             createdBy: interaction.user.id,
             embed: {
               title: embedTitle,

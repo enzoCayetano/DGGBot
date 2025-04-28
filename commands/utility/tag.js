@@ -131,38 +131,19 @@ module.exports = {
     else if (subcommand === 'list') 
     {
       const tags = await Tag.find({});
-      
-      if (tags.length === 0) 
-      {
+  
+      if (tags.length === 0) {
         return await interaction.reply({
           content: 'There are no tags yet!',
           ephemeral: true,
         });
       }
-    
-      // Build a list of embed previews
-      const embeds = tags.map(tag => {
-        if (tag.embed) 
-        {
-          return {
-            title: tag.embed.title || `${tag.name}`,
-            description: tag.description,
-            color: parseInt(tag.embed.color?.replace(/^#/, ''), 16) || 0x5865F2,
-            footer: tag.embed.footer ? { text: tag.embed.footer } : undefined,
-          };
-        } 
-        else 
-        {
-          return {
-            title: `Tag: ${tag.name}`,
-            description: tag.description,
-            color: 0x2F3136,
-          };
-        }
+
+      const tagList = tags.map(tag => `.${tag.name}`).join(', ');
+
+      return await interaction.reply({
+        content: `${tagList}`
       });
-    
-      // If too many embeds, paginate or trim — for now just send them in one message
-      return await interaction.reply({ embeds, ephemeral: true });
     }
   }
 };
