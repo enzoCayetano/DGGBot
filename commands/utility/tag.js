@@ -117,7 +117,7 @@ module.exports = {
         .setCustomId('tagContent')
         .setLabel('Message content...')
         .setStyle(TextInputStyle.Paragraph)
-        .setValue(tag.content || '')
+        .setValue(tag.description || '')
         .setRequired(true);
 
       modal.addComponents(
