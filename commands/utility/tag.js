@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, PermissionFlagsBits } = require('discord.js');
 const Tag = require('../../models/Tag');
+const interactionCreate = require('../../events/interactionCreate');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -8,23 +9,14 @@ module.exports = {
     .addSubcommand(subcommand =>
       subcommand
         .setName('create')
-        .setDescription('Create a new tag.')
-        .addStringOption(option => 
-          option
-            .setName('type')
-            .setDescription('Choose between simple or advanced tag creation.')
-            .setRequired(true)
-            .addChoices(
-              { name: 'Simple', value: 'simple' },
-              { name: 'Advanced', value: 'advanced' },
-            )))
+        .setDescription('Create a new tag.'))
     .addSubcommand(subcommand =>
       subcommand
         .setName('edit')
         .setDescription('Edit an existing tag.')
         .addStringOption(option =>
           option
-            .setName('edit')
+            .setName('name')
             .setDescription('The name of the tag to edit.')
             .setRequired(true)))
     .addSubcommand(subcommand =>
@@ -63,11 +55,10 @@ module.exports = {
 
     if (subcommand === 'create')
     {
-      const type = interaction.options.getString('type');
 
       const modal = new ModalBuilder()
-        .setCustomId(type === 'simple' ? 'createTagModal' : 'createTagModalAdvanced')
-        .setTitle(type === 'simple' ? 'Create New Tag' : 'Advanced Tag Creator');
+        .setCustomId('createTagModal')
+        .setTitle('Create New Tag');
 
       const tagNameInput = new TextInputBuilder()
         .setCustomId('tagName')
@@ -81,45 +72,26 @@ module.exports = {
         .setStyle(TextInputStyle.Paragraph)
         .setRequired(true);
 
-      modal.addComponents(new ActionRowBuilder().addComponents(tagNameInput));
-
-      if (type === 'simple')
-      {
-        modal.addComponents(new ActionRowBuilder().addComponents(tagContentInput));
-      }
-      else
-      {
-        const embedTitleInput = new TextInputBuilder()
-          .setCustomId('embedTitle')
-          .setLabel('Embed Title (optional)')
-          .setStyle(TextInputStyle.Short)
-          .setRequired(false);
-
-          const embedColorInput = new TextInputBuilder()
-          .setCustomId('embedColor')
-          .setLabel('Embed Color (hex, optional)')
-          .setStyle(TextInputStyle.Short)
-          .setRequired(false);
-    
-        const footerInput = new TextInputBuilder()
-          .setCustomId('embedFooter')
-          .setLabel('Footer text (optional)')
-          .setStyle(TextInputStyle.Short)
-          .setRequired(false);
-    
-        modal.addComponents(
-          new ActionRowBuilder().addComponents(tagContentInput),
-          new ActionRowBuilder().addComponents(embedTitleInput),
-          new ActionRowBuilder().addComponents(embedColorInput),
-          new ActionRowBuilder().addComponents(footerInput)
-        );
-      }
+      modal.addComponents(
+        new ActionRowBuilder().addComponents(tagNameInput),
+        new ActionRowBuilder().addComponents(tagContentInput)
+      );
 
       await interaction.showModal(modal);
     }
     else if (subcommand === 'edit')
     {
       const name = interaction.options.getString('name').toLowerCase();
+      console.log(name + ', ' + interaction.options.getString('name'));
+
+      if (!name)
+      {
+        return await interaction.reply({
+          content: `❌ Invalid tag name: \`${name}\`.`,
+          ephemeral: true,
+        });
+      }
+
       const tag = await Tag.findOne({ name });
 
       if (!tag) 
@@ -134,14 +106,22 @@ module.exports = {
         .setCustomId(`editTagModal:${tag._id}`)
         .setTitle('Edit Tag');
 
+      const tagNameInput = new TextInputBuilder()
+        .setCustomId('tagName')
+        .setLabel('Tag name (unchangeable here)')
+        .setStyle(TextInputStyle.Short)
+        .setValue(tag.name)
+        .setRequired(true);
+
       const tagContentInput = new TextInputBuilder()
         .setCustomId('tagContent')
-        .setLabel('Updated content')
+        .setLabel('Message content...')
         .setStyle(TextInputStyle.Paragraph)
         .setValue(tag.content || '')
         .setRequired(true);
 
       modal.addComponents(
+        new ActionRowBuilder().addComponents(tagNameInput),
         new ActionRowBuilder().addComponents(tagContentInput)
       );
 

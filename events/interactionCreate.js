@@ -37,53 +37,9 @@ module.exports = {
         }
       }
 
-      if (interaction.customId === 'createTagModalAdvanced') {
-        try {
-          const name = interaction.fields.getTextInputValue('tagName').toLowerCase();
-          const content = interaction.fields.getTextInputValue('tagContent');
-          const embedTitle = interaction.fields.getTextInputValue('embedTitle') || null;
-          const embedColor = interaction.fields.getTextInputValue('embedColor') || null;
-          const footer = interaction.fields.getTextInputValue('embedFooter') || null;
-
-          // check if tag exists
-          const existing = await Tag.findOne({ name });
-          if (existing) {
-            return await interaction.reply({
-              content: `❌ A tag with the name \`${name}\` already exists.`,
-              ephemeral: true,
-            });
-          }
-
-          // Store tag with embed info
-          await Tag.create({
-            name,
-            description: content,
-            type: 'advanced',
-            createdBy: interaction.user.id,
-            embed: {
-              title: embedTitle,
-              color: embedColor,
-              footer: footer,
-            },
-          });
-
-          await interaction.reply({
-            content: `🎨 Advanced tag \`${name}\` created with embed options.`,
-            ephemeral: true,
-          });
-        } catch (err) {
-          console.error('Error creating advanced tag:', err);
-          await interaction.reply({
-            content: '❌ Failed to create advanced tag. Please try again later.',
-            ephemeral: true,
-          });
-        }
-      }
-
       if (interaction.customId.startsWith('editTagModal:'))
       {
         const tagId = interaction.customId.split(':')[1];
-        const newContent = interaction.fields.getTextInputValue('tagContent');
 
         const tag = await Tag.findById(tagId);
         if (!tag)
@@ -94,11 +50,14 @@ module.exports = {
           });
         }
 
+        const newContent = interaction.fields.getTextInputValue('tagContent');
+
         tag.content = newContent;
+
         await tag.save();
 
         return interaction.reply({
-          content: `Tag \`${tag.name}\` has been updated.`,
+          content: `✅ Tag \`${tag.name}\` has been updated.`,
           ephemeral: true,
         });
       }
