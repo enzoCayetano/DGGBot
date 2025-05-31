@@ -17,8 +17,16 @@ module.exports = {
             .addChoices(
               { name: 'Simple', value: 'simple' },
               { name: 'Advanced', value: 'advanced' },
-            )
-        ))
+            )))
+    .addSubcommand(subcommand =>
+      subcommand
+        .setName('edit')
+        .setDescription('Edit an existing tag.')
+        .addStringOption(option =>
+          option
+            .setName('edit')
+            .setDescription('The name of the tag to edit.')
+            .setRequired(true)))
     .addSubcommand(subcommand =>
       subcommand
         .setName('delete')
@@ -106,6 +114,36 @@ module.exports = {
           new ActionRowBuilder().addComponents(footerInput)
         );
       }
+
+      await interaction.showModal(modal);
+    }
+    else if (subcommand === 'edit')
+    {
+      const name = interaction.options.getString('name').toLowerCase();
+      const tag = await Tag.findOne({ name });
+
+      if (!tag) 
+      {
+        return await interaction.reply({
+          content: `❌ Tag \`${name}\` not found.`,
+          ephemeral: true,
+        });
+      }
+
+      const modal = new ModalBuilder()
+        .setCustomId(`editTagModal:${tag._id}`)
+        .setTitle('Edit Tag');
+
+      const tagContentInput = new TextInputBuilder()
+        .setCustomId('tagContent')
+        .setLabel('Updated content')
+        .setStyle(TextInputStyle.Paragraph)
+        .setValue(tag.content || '')
+        .setRequired(true);
+
+      modal.addComponents(
+        new ActionRowBuilder().addComponents(tagContentInput)
+      );
 
       await interaction.showModal(modal);
     }

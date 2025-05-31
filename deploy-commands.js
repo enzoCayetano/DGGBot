@@ -3,7 +3,7 @@ const { REST, Routes } = require('discord.js');
 const fs = require('node:fs');
 const path = require('node:path');
 
-// ✅ Load env vars
+// load global vars
 const token = process.env.DISCORD_TOKEN;
 const clientId = process.env.CLIENT_ID;
 const guildId = process.env.DEV_GUILD_ID;
@@ -12,7 +12,7 @@ const args = process.argv.slice(2);
 const isGlobal = args.includes('--global');
 const isDev = args.includes('--dev');
 
-// 🧠 Sanity check
+// check flags
 if (isGlobal && isDev) {
 	console.error('❌ You cannot deploy with both --global and --dev flags.');
 	process.exit(1);
@@ -22,7 +22,7 @@ if (!isGlobal && !isDev) {
 	console.warn('⚠️ No flag specified. Defaulting to --dev.');
 }
 
-// 🗂️ Load commands
+// load the commands
 const commands = [];
 const foldersPath = path.join(__dirname, 'commands');
 const commandFolders = fs.readdirSync(foldersPath);
@@ -44,7 +44,7 @@ for (const folder of commandFolders) {
 
 const rest = new REST().setToken(token);
 
-// 🚀 Deploy
+// deploy commands
 (async () => {
 	try {
 		console.log(`⏳ Started refreshing ${commands.length} application (/) commands.`);

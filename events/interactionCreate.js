@@ -79,6 +79,29 @@ module.exports = {
           });
         }
       }
+
+      if (interaction.customId.startsWith('editTagModal:'))
+      {
+        const tagId = interaction.customId.split(':')[1];
+        const newContent = interaction.fields.getTextInputValue('tagContent');
+
+        const tag = await Tag.findById(tagId);
+        if (!tag)
+        {
+          return interaction.reply({
+            content: 'Tag not found.',
+            ephemeral: true,
+          });
+        }
+
+        tag.content = newContent;
+        await tag.save();
+
+        return interaction.reply({
+          content: `Tag \`${tag.name}\` has been updated.`,
+          ephemeral: true,
+        });
+      }
     }
 
     // ---- HANDLE SLASH COMMANDS ----
