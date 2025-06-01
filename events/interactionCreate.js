@@ -6,14 +6,16 @@ module.exports = {
   async execute(interaction) {
     // ---- HANDLE MODALS ----
     if (interaction.isModalSubmit()) {
-      if (interaction.customId === 'createTagModal') {
+      if (interaction.customId === 'createTagModal') 
+      {
         const name = interaction.fields.getTextInputValue('tagName').toLowerCase();
         const description = interaction.fields.getTextInputValue('tagContent');
 
-        try {
-          // check if tag exists
+        try 
+        {
           const existing = await Tag.findOne({ name });
-          if (existing) {
+          if (existing) 
+          {
             return await interaction.reply({
               content: `❌ A tag with the name \`${name}\` already exists.`,
               ephemeral: true,
@@ -60,6 +62,15 @@ module.exports = {
           content: `✅ Tag \`${tag.name}\` has been updated.`,
           ephemeral: true,
         });
+      }
+
+      if (interaction.customId === 'sendMessageModal')
+      {
+        const messageContent = interaction.fields.getTextInputValue('sendMessageContent');
+
+        await interaction.deferReply({ ephemeral: true, });
+        await interaction.channel.send(messageContent);
+        await interaction.editReply({ content: 'Message successfully sent. ' });
       }
     }
 

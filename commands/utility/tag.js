@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, PermissionFlagsBits } = require('discord.js');
+const { SlashCommandBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder } = require('discord.js');
 const Tag = require('../../models/Tag');
 const interactionCreate = require('../../events/interactionCreate');
 
@@ -41,6 +41,14 @@ module.exports = {
     const userHasRequiredRole = interaction.member.roles.cache.some(role =>
       this.requiredRoles.includes(role.id)
     );
+    
+    if (!userHasRequiredRole) 
+    {
+      return interaction.reply({
+        content: 'You do not have permission to use this command.',
+        ephemeral: true,
+      });
+    }
 
     // check if role is in server
     if (
@@ -51,7 +59,7 @@ module.exports = {
         content: '❌ You must use this command in a server.',
         ephemeral: true
       });
-    }    
+    }
 
     if (subcommand === 'create')
     {
