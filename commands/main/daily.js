@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
+const Profile = require('../../models/Profile');
 
 module.exports = {
   data: new SlashCommandBuilder()
