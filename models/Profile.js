@@ -6,6 +6,11 @@ const profileSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+  userId: {
+    type: String,
+    required: true,
+    unique: true
+  },
   points: {
     type: Number,
     required: true,
@@ -17,7 +22,7 @@ const profileSchema = new mongoose.Schema({
     required: true,
     default: Date.now
   },
-  lastActive: {
+  lastClaimed: {
     type: Date,
     default: null
   }
