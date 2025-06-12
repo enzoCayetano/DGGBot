@@ -13,6 +13,7 @@ module.exports = {
     try 
     {
       let profile = await Profile.findOne({ userId });
+      const member = await interaction.guild.members.fetch(userId);
 
       if (!profile) 
         {
@@ -20,7 +21,8 @@ module.exports = {
           username,
           userId,
           points: 10,
-          lastClaimed: new Date()
+          lastClaimed: new Date(),
+          joinedAt: member.joinedAt
         });
 
         await profile.save();
