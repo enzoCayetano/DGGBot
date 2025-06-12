@@ -1,6 +1,5 @@
 const { SlashCommandBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder } = require('discord.js');
 const Tag = require('../../models/Tag');
-const interactionCreate = require('../../events/interactionCreate');
 
 module.exports = {
   data: new SlashCommandBuilder()
