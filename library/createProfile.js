@@ -1,5 +1,11 @@
 const Profile = require('../models/Profile');
 
+/**
+ * Creates a user profile if it doesn't exist.
+ * @param {*} user 
+ * @param {*} options 
+ * @returns 
+ */
 async function createProfile(user, options = {})
 {
   try
