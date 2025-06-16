@@ -11,6 +11,24 @@ const profileSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
+  xp: {
+    type: Number,
+    required: true,
+    default: 0,
+    min: 0
+  },
+  level: {
+    type: Number,
+    required: true,
+    default: 1,
+    min: 1
+  },
+  reputation: {
+    type: Number,
+    required: true,
+    default: 0,
+    min: -256
+  },
   points: {
     type: Number,
     required: true,
