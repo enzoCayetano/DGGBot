@@ -23,7 +23,7 @@ module.exports = {
         await profile.save();
       }
 
-      await interaction.reply({ content: `You currently have **${profile.points}** points.` });
+      await interaction.editReply({ content: `You currently have **${profile.points}** points.` });
     }
     catch (err)
     {
