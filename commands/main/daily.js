@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const Profile = require('../../models/Profile');
+const createProfile = require('../../library/createProfile');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -12,22 +13,16 @@ module.exports = {
 
     try 
     {
-      let profile = await Profile.findOne({ userId });
       const member = await interaction.guild.members.fetch(userId);
 
-      // if profile doesn't exist, create it
-      if (!profile) 
-      {
-        profile = new Profile({
-          username,
-          userId,
-          points: 10,
-          lastClaimed: new Date(),
-          joinedAt: member.joinedAt
-        });
+      const profile = await createProfile(member, {
+        points: 10,
+        lastClaimed: new Date()
+      });
 
-        await profile.save();
-        return interaction.reply('Profile created! You received 10 daily points.');
+      if (profile.points === 10 && profile.lastClaimed.getTime() === new Date().getTime()) 
+      {
+        return interaction.reply('New profile created! You have received **10** points.');
       }
 
       const now = new Date();
@@ -46,7 +41,7 @@ module.exports = {
       profile.lastClaimed = now;
       await profile.save();
 
-      return interaction.reply(`You've claimed your daily reward and now have ${profile.points} points!`);
+      return interaction.reply(`You've claimed your daily reward and now have **${profile.points}** points!`);
     } 
     catch (err) 
     {

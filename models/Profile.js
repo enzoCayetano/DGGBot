@@ -35,17 +35,17 @@ const profileSchema = new mongoose.Schema({
     default: 0,
     min: -256
   },
-  points: {
-    type: Number,
-    required: true,
-    default: 0,
-    min: 0
-  },
   bio: {
     type: String,
     required: true,
     default: 'No bio set.',
     trim: true
+  },
+  points: {
+    type: Number,
+    required: true,
+    default: 0,
+    min: 0
   },
   joinedAt: {
     type: Date,
