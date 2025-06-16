@@ -3,9 +3,11 @@ const Tag = require('../models/Tag');
 
 module.exports = {
   name: Events.InteractionCreate,
-  async execute(interaction) {
+  async execute(interaction) 
+  {
     // ---- HANDLE MODALS ----
-    if (interaction.isModalSubmit()) {
+    if (interaction.isModalSubmit()) 
+    {
       if (interaction.customId === 'createTagModal') 
       {
         const name = interaction.fields.getTextInputValue('tagName').toLowerCase();
@@ -30,7 +32,9 @@ module.exports = {
           });
 
           await interaction.reply({ content: `✅ Tag \`${name}\` has been created!`, ephemeral: true });
-        } catch (err) {
+        } 
+        catch (err) 
+        {
           console.error('Error creating tag:', err);
           await interaction.reply({
             content: '❌ Failed to create tag. Please try again later.',
@@ -78,7 +82,8 @@ module.exports = {
     if (interaction.isCommand()) {
       const command = interaction.client.commands.get(interaction.commandName);
 
-      if (!command) {
+      if (!command) 
+      {
         console.error(`No command matching ${interaction.commandName} was found.`);
         return;
       }
@@ -94,10 +99,12 @@ module.exports = {
       const defaultCooldownDuration = 3;
       const cooldownAmount = (command.cooldown ?? defaultCooldownDuration) * 1000;
 
-      if (timestamps.has(interaction.user.id)) {
+      if (timestamps.has(interaction.user.id)) 
+      {
         const expirationTime = timestamps.get(interaction.user.id) + cooldownAmount;
 
-        if (now < expirationTime) {
+        if (now < expirationTime) 
+        {
           const expiredTimestamp = Math.round(expirationTime / 1000);
           return interaction.reply({
             content: `Please wait, this command has a cooldown of \`${command.data.name}\`. You can use it again <t:${expiredTimestamp}:R>.`,
@@ -109,9 +116,12 @@ module.exports = {
       timestamps.set(interaction.user.id, now);
       setTimeout(() => timestamps.delete(interaction.user.id), cooldownAmount);
 
-      try {
+      try 
+      {
         await command.execute(interaction);
-      } catch (error) {
+      } 
+      catch (error) 
+      {
         console.error(`Error executing ${interaction.commandName}`);
         console.error(error);
       }

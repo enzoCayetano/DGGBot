@@ -17,7 +17,7 @@ module.exports = {
 
       // if profile doesn't exist, create it
       if (!profile) 
-        {
+      {
         profile = new Profile({
           username,
           userId,
