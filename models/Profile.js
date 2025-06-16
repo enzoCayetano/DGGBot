@@ -41,6 +41,12 @@ const profileSchema = new mongoose.Schema({
     default: 0,
     min: 0
   },
+  bio: {
+    type: String,
+    required: true,
+    default: 'No bio set.',
+    trim: true
+  },
   joinedAt: {
     type: Date,
     required: true,
