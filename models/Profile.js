@@ -11,6 +11,12 @@ const profileSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
+  title: {
+    type: String,
+    required: true,
+    default: 'Member',
+    trim: true
+  },
   xp: {
     type: Number,
     required: true,
