@@ -15,6 +15,7 @@ module.exports = {
       let profile = await Profile.findOne({ userId });
       const member = await interaction.guild.members.fetch(userId);
 
+      // if profile doesn't exist, create it
       if (!profile) 
         {
         profile = new Profile({

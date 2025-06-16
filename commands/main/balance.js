@@ -10,17 +10,13 @@ module.exports = {
     try
     {
       await interaction.deferReply();
-      let profile = await Profile.findOne({ userId: interaction.user.id });
+      const profile = await Profile.findOne({ userId: interaction.user.id });
 
-      // if profile doesn't exist, create one
+      // if profile doesn't exist
       if (!profile) 
-        {
-        profile = new Profile({
-          username: interaction.user.username,
-          userId: interaction.user.id,
-          points: 0
-        });
-        await profile.save();
+      {
+        await interaction.editReply({ content: 'You don\'t currently have a profile yet. Please run `/daily` at least once to create one.' });
+        return;
       }
 
       await interaction.editReply({ content: `You currently have **${profile.points}** points.` });

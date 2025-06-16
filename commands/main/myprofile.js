@@ -21,7 +21,7 @@ module.exports = {
     {
       const profile = await Profile.findOne({ userId });
 
-      // if profile doesn't exist, create one
+      // check if profile exists
       if (!profile) 
       {
         return interaction.reply({
