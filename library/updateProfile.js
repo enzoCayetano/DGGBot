@@ -6,18 +6,18 @@ const Profile = require('../models/Profile');
  * @param {*} roleTitleMap 
  * @returns 
  */
-async function updateTitle(user, roleTitleMap = {})
+async function updateProfile(user, roleTitleMap = {})
 {
   try
   {
     const profile = await Profile.findOne({ userId: user.id });
     if (!profile) return null;
 
-    for (const [role, title] of Object.entries(roleTitleMap))
+    for (const [role, data] of Object.entries(roleTitleMap))
     {
       if (user.roles.cache.has(role))
       {
-        profile.title = title;
+        profile.title = data.title;
         await profile.save();
         return profile;
       }

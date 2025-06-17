@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const Profile = require('../../models/Profile');
+const roleTitles = require('../../roles.json');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -16,6 +17,7 @@ module.exports = {
     const targetUser = interaction.options.getUser('user') || interaction.user;
     const userId = targetUser.id;
     const username = targetUser.username;
+    const member = await interaction.guild.members.fetch(userId);
 
     try 
     {
@@ -30,8 +32,12 @@ module.exports = {
         });
       }
 
+      await updateProfile(targetUser, roleTitles);
+
+
+
       const embed = new EmbedBuilder()
-        .setTitle(`${username}'s Profile`)
+        .setTitle(`${member.displayName}`)
         .setColor(0x00AE86)
         .setThumbnail(targetUser.displayAvatarURL({ dynamic: true }))
         .addFields(
