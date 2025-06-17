@@ -9,13 +9,10 @@ module.exports = {
   async execute(interaction)
   {
     const userId = interaction.user.id;
-    const username = interaction.user.username;
 
     try 
     {
-      const member = await interaction.guild.members.fetch(userId);
-
-      const profile = await createProfile(member, {
+      const profile = await createProfile(interaction.user, {
         points: 10,
         lastClaimed: new Date()
       });
