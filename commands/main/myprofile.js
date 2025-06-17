@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const Profile = require('../../models/Profile');
 const roleTitles = require('../../roles.json');
+const updateProfile = require('../../library/updateProfile');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -32,9 +33,7 @@ module.exports = {
         });
       }
 
-      await updateProfile(targetUser, roleTitles);
-
-
+      await updateProfile(member, roleTitles);
 
       const embed = new EmbedBuilder()
         .setTitle(`${member.displayName}`)

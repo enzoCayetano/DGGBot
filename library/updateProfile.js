@@ -2,7 +2,7 @@ const Profile = require('../models/Profile');
 
 /**
  * Updates the user's profile title based on their roles.
- * @param {*} user 
+ * @param {*} member 
  * @param {*} roleTitleMap 
  * @returns 
  */
@@ -31,3 +31,5 @@ async function updateProfile(user, roleTitleMap = {})
     throw new Error(`Failed to update profile title: ${err.message}`);
   }
 }
+
+module.exports = updateProfile;
