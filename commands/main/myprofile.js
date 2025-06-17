@@ -41,6 +41,11 @@ module.exports = {
         .setColor(0x00AE86)
         .setThumbnail(targetUser.displayAvatarURL({ dynamic: true }))
         .addFields(
+          { name: 'Title', value: profile.title, inline: true },
+          { name: 'XP', value: profile.xp.toString(), inline: true },
+          { name: 'Level', value: profile.level.toString(), inline: true },
+          { name: 'Reputation', value: profile.reputation.toString(), inline: true },
+          { name: 'Bio', value: profile.bio || 'No bio set.', inline: false },
           { name: 'Points', value: profile.points.toString(), inline: true },
           { name: 'Joined At', value: `<t:${Math.floor(profile.joinedAt.getTime() / 1000)}:D>`, inline: true },
           { name: 'Last Daily Claimed', value: profile.lastClaimed
