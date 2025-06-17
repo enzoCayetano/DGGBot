@@ -4,6 +4,7 @@ Discord: https://discord.gg/DeadGirlGaming
 
 # TODO:
 * make edit bio command
-* finish embed, make it pretty
-* implement reputation
+* finish embed
 * implement welcome and leave messages
+* transition embeds to node canvas
+* implement reputation

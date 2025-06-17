@@ -33,7 +33,8 @@ const profileSchema = new mongoose.Schema({
     type: Number,
     required: true,
     default: 0,
-    min: -256
+    min: -256,
+    max: 256
   },
   bio: {
     type: String,
