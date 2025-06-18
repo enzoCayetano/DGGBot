@@ -1,5 +1,6 @@
 const { Collection, Events } = require('discord.js');
 const Tag = require('../models/Tag');
+const Profile = require('../models/Profile');
 
 module.exports = {
   name: Events.InteractionCreate,
@@ -75,6 +76,31 @@ module.exports = {
         await interaction.deferReply({ ephemeral: true, });
         await interaction.channel.send(messageContent);
         await interaction.editReply({ content: 'Message successfully sent. ' });
+      }
+
+      if (interaction.customId === 'editBioModal') 
+      {
+        const newBio = interaction.fields.getTextInputValue('editBioContent');
+
+        try 
+        {
+          const profile = await Profile.findOne({ userId: interaction.user.id });
+          profile.bio = newBio;
+          await profile.save();
+
+          return interaction.reply({
+            content: `Your bio has been updated to: "${newBio}"`,
+            ephemeral: true,
+          });
+        } 
+        catch (err) 
+        {
+          console.error('Error updating bio:', err);
+          return interaction.reply({
+            content: '❌ Failed to update bio. Please try again later.',
+            ephemeral: true,
+          });
+        }
       }
     }
 
