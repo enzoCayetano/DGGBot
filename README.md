@@ -3,8 +3,8 @@ A bot created by swag for the official Dead Girl Gaming server.
 Discord: https://discord.gg/DeadGirlGaming
 
 # TODO:
-* make edit bio command
-* finish embed
+* ~~make edit bio command~~ completed!
 * implement welcome and leave messages
+* finish profile embed
 * transition embeds to node canvas
 * implement reputation
