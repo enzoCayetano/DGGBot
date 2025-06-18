@@ -2,7 +2,7 @@ const { EmbedBuilder } = require('discord.js');
 require('dotenv').config();
 
 module.exports = {
-    name: 'welcomeMember',
+    name: 'guildMemberAdd',
     async execute(member)
     {
         const channelId = process.env.WELCOME_CHANNEL_ID;
@@ -18,4 +18,4 @@ module.exports = {
 
         channel.send({ embeds: [embed] });
     }
-}
+};

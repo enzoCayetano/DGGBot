@@ -2,7 +2,7 @@ const { EmbedBuilder } = require('discord.js');
 require('dotenv').config();
 
 module.exports = {
-    name: 'leaveMember',
+    name: 'guildMemberRemove',
     async execute(member)
     {
         const channelId = process.env.LEAVE_CHANNEL_ID;
@@ -18,4 +18,5 @@ module.exports = {
 
         channel.send({ embeds: [embed] });
     }
-}
+};
+
