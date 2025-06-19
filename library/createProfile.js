@@ -20,7 +20,7 @@ async function createProfile(user, options = {})
       reputation: 0,
       bio: 'No bio set.',
       points: 0,
-      lastClaimed: new Date(),
+      lastClaimed: null,
       joinedAt: new Date()
     };
 
