@@ -14,7 +14,7 @@ const profileSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
-    default: 'Member',
+    default: "1239311742694199388",
     trim: true
   },
   xp: {

@@ -37,10 +37,10 @@ module.exports = {
 
       const embed = new EmbedBuilder()
         .setTitle(`${member.displayName}`)
-        .setColor(roleTitles[profile.title]?.color || '#0099ff')
+        .setColor(roleTitles[profile.title]?.color || '#13ed5f')
         .setThumbnail(targetUser.displayAvatarURL({ dynamic: true }))
         .addFields(
-          { name: 'Title', value: profile.title, inline: true },
+          { name: 'Title', value: roleTitles[profile.title]?.title, inline: true },
           { name: 'XP', value: profile.xp.toString(), inline: true },
           { name: 'Level', value: profile.level.toString(), inline: true },
           { name: 'Reputation', value: profile.reputation.toString(), inline: true },

@@ -14,7 +14,7 @@ async function createProfile(user, options = {})
     if (existingProfile) return existingProfile;
 
     const defaults = {
-      title: 'Member',
+      title: "1239311742694199388",
       xp: 0,
       level: 1,
       reputation: 0,

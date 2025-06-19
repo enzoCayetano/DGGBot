@@ -8,8 +8,6 @@ module.exports = {
     .setDescription('Collect daily points.'),
   async execute(interaction)
   {
-    const userId = interaction.user.id;
-
     try 
     {
       const profile = await createProfile(interaction.user, {
