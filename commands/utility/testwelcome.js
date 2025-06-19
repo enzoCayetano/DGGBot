@@ -1,7 +1,7 @@
 //
 const { SlashCommandBuilder } = require('discord.js');
-const welcomeEvent = require('../../events/welcomeMember'); // path to your event
-const leaveEvent = require('../../events/leaveMember'); // path to your event
+const welcomeEvent = require('../../events/guildMemberAdd'); // path to your event
+const leaveEvent = require('../../events/guildMemberRemove'); // path to your event
 
 module.exports = {
   data: new SlashCommandBuilder()
