@@ -6,6 +6,8 @@ Discord: https://discord.gg/DeadGirlGaming
 * ~~make edit bio command~~ completed!
 * ~~implement welcome and leave messages~~ completed!
 * ~~finish profile embed~~
-* change daily to reset at 0:00 UTC rather than a full 24 hours
-* transition embeds to node canvas
+* ~~change daily to reset at 0:00 UTC rather than a full 24 hours~~ completed!
+* ~~add new create profile command~~
 * implement reputation
+* implement new fun commands
+* transition embeds to node canvas
