@@ -23,15 +23,20 @@ module.exports = {
       }
 
       const now = new Date();
-      const lastClaimed = profile.lastClaimed || new Date(0);
+      const lastClaimed = profile.lastClaimed ? new Date(profile.lastClaimed) : new Date(0);
 
-      const msInDay = 1000 * 60 * 60 * 24;
-      const timeDiff = now - lastClaimed;
+      const nowUTCDate = now.toISOString().split('T')[0];
+      const lastClaimedUTCDate = lastClaimed.toISOString().split('T')[0];
 
-      if (timeDiff < msInDay) 
+      // if already claimed today
+      if (nowUTCDate === lastClaimedUTCDate) 
       {
-        const hoursLeft = Math.ceil((msInDay - timeDiff) / (1000 * 60 * 60));
-        return interaction.reply(`You’ve already claimed your daily reward. Try again in ${hoursLeft} hour(s)!`);
+        const nextReset = new Date(nowUTCDate + 'T00:00:00Z');
+        nextReset.setUTCDate(nextReset.getUTCDate() + 1);
+
+        const msLeft = nextReset - now;
+        const hoursLeft = Math.ceil(msLeft / (1000 * 60 * 60))
+        return interaction.reply(`You have already claimed your daily points today. Please try again in ${hoursLeft} hour(s)!`);
       }
 
       profile.points += 10;
