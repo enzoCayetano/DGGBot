@@ -48,6 +48,11 @@ const profileSchema = new mongoose.Schema({
     default: 0,
     min: 0
   },
+  tournamentsWon: {
+    type: Number,
+    default: 0,
+    min: 0
+  },
   joinedAt: {
     type: Date,
     required: true,

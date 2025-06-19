@@ -21,10 +21,7 @@ module.exports = {
         }
 
         // create a new profile
-        const newProfile = await createProfile(interaction.user, {
-            points: 0,
-            lastClaimed: null
-        });
+        const newProfile = await createProfile(interaction.user);
 
         await interaction.editReply({ content: `Created a new profile for ${interaction.user.username}.` });
     }
