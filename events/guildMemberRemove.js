@@ -13,7 +13,7 @@ module.exports = {
             .setColor('#c922c3')
             .setTitle('Goodbye!')
             .setThumbnail(member.user.displayAvatarURL())
-            .setDescription(`We're sad to see you go, ${member}. Thank you for being a part of Dead Girl Gaming!`)
+            .setDescription(`We're sad to see you go, ${member.user.toString()}. Thank you for being a part of Dead Girl Gaming!`)
             .setTimestamp();
 
         channel.send({ embeds: [embed] });

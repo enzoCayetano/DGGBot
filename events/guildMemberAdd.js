@@ -13,7 +13,7 @@ module.exports = {
             .setColor('#8122c9')
             .setTitle('Welcome!')
             .setThumbnail(member.user.displayAvatarURL())
-            .setDescription(`Welcome to Dead Girl Gaming, ${member}! Check out our https://discord.com/channels/1226974556636450856/1227383792554086420, https://discord.com/channels/1226974556636450856/1234254464718733323, and introduce yourself in the https://discord.com/channels/1226974556636450856/1227387874282963085 channel.`)
+            .setDescription(`Welcome to Dead Girl Gaming, ${member.user.toString()}! Check out our https://discord.com/channels/1226974556636450856/1227383792554086420, https://discord.com/channels/1226974556636450856/1234254464718733323, and introduce yourself in the https://discord.com/channels/1226974556636450856/1227387874282963085 channel.`)
             .setTimestamp();
 
         channel.send({ embeds: [embed] });
