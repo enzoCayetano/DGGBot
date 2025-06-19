@@ -37,7 +37,7 @@ module.exports = {
 
       const embed = new EmbedBuilder()
         .setTitle(`${member.displayName}`)
-        .setColor(0x00AE86)
+        .setColor(roleTitles[profile.title]?.color || '#0099ff')
         .setThumbnail(targetUser.displayAvatarURL({ dynamic: true }))
         .addFields(
           { name: 'Title', value: profile.title, inline: true },
