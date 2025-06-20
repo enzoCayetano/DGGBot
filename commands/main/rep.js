@@ -39,18 +39,18 @@ module.exports = {
             const actorId = interaction.user.id;
             const targetId = user.id;
             const nowDate = new Date().toISOString().split('T')[0];
-            const actorMember = await interaction.guild.members.fetch(interaction.userId);
-            const targetMember = await interaction.guild.members.fetch(userId);
+            const actorMember = await interaction.guild.members.fetch(actorId);
+            const targetMember = await interaction.guild.members.fetch(targetId);
 
             // check if rep value exists
             const actorProfile = await Profile.findOneAndUpdate(
                 { userId: actorId },
-                { $setOnInsert: { rep: 0 } },
+                { $setOnInsert: { reputation: 0 } },
                 { upsert: true, new: true }
             )
             const targetProfile = await Profile.findOneAndUpdate(
                 { userId: targetId },
-                { $setOnInsert: { rep: 0 } },
+                { $setOnInsert: { reputation: 0 } },
                 { upsert: true, new: true }
             );
 
@@ -64,7 +64,7 @@ module.exports = {
             if (sub === 'check')
             {
                 await interaction.reply({ 
-                    content: `${targetMember.displayName} has a reputation of \'${targetProfile.rep}.\'`,
+                    content: `${targetMember.displayName} has a reputation of '${targetProfile.reputation}'.`,
                 });
                 return;
             }
@@ -102,7 +102,7 @@ module.exports = {
             }
 
             const amount = (sub === 'up') ? 1 : -1;
-            const newRep = targetProfile.rep + amount;
+            const newRep = targetProfile.reputation + amount;
 
             if (newRep > MAX_REP)
             {
@@ -119,7 +119,7 @@ module.exports = {
                 });
             }
 
-            targetProfile.rep = newRep;
+            targetProfile.reputation = newRep;
             await targetProfile.save();
 
             actorProfile.repGivenToday.push(targetId);
@@ -128,7 +128,7 @@ module.exports = {
             await actorProfile.save();
 
             await interaction.reply({ 
-                content: `You have successfully given ${amount > 0 ? 'positive' : 'negative'} reputation to ${targetMember.displayName}. Their new reputation is now ${targetProfile.rep}.`,
+                content: `You have successfully given ${amount > 0 ? 'positive' : 'negative'} reputation to ${targetMember.displayName}. Their new reputation is now ${targetProfile.reputation}.`,
                 ephemeral: true
             });
 
@@ -137,7 +137,7 @@ module.exports = {
             if (logChannel)
             {
                 logChannel.send({
-                    content: `${actorMember.displayName} (${actorId}) has given ${amount > 0 ? 'positive' : 'negative'} reputation to ${targetMember.displayName} (${targetId}). New reputation: ${targetProfile.rep}.`
+                    content: `${actorMember.displayName} (${actorId}) has given ${amount > 0 ? 'positive' : 'negative'} reputation to ${targetMember.displayName} (${targetId}). New reputation: ${targetProfile.reputation}.`
                 });
             }
             else
@@ -148,7 +148,7 @@ module.exports = {
         catch (err)
         {
             console.error(err);
-            return interaction.editReply({ ephemeral: true, content: 'An error occurred processing the rep command.' });
+            return interaction.reply({ ephemeral: true, content: 'An error occurred processing the rep command.' });
         }
     }
 };
