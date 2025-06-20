@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const Profile = require('../../models/Profile');
-const roleTitles = require('../../roles.json');
+const roleTitles = require('../../json/roles.json');
 const updateProfile = require('../../library/updateProfile');
 
 module.exports = {

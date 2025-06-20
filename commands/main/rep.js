@@ -3,7 +3,7 @@ const Profile = require('../../models/Profile');
 
 const MAX_REP = 256;
 const MIN_REP = -256;
-const MOD_LOG_CHANNEL_ID = '';
+const MOD_LOG_CHANNEL_ID = '1248095165047115827';
 
 module.exports = {
   data: new SlashCommandBuilder()
