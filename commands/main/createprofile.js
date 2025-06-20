@@ -12,6 +12,7 @@ module.exports = {
     {
         await interaction.deferReply();
         const profile = await Profile.findOne({ userId: interaction.user.id });
+        const member = await interaction.guild.members.fetch(interaction.user.id);
 
         // if profile does exist
         if (profile) 
@@ -23,7 +24,7 @@ module.exports = {
         // create a new profile
         const newProfile = await createProfile(interaction.user);
 
-        await interaction.editReply({ content: `Created a new profile for ${interaction.user.username}.` });
+        await interaction.editReply({ content: `Created a new profile for ${member.displayName}.` });
     }
     catch (err)
     {
