@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, ModalBuilder, TextInputBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder } = require('discord.js');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -7,10 +7,6 @@ module.exports = {
     .addChannelOption(opt =>
       opt.setName('channel')
         .setDescription('The channel to send the announcement in.')
-        .setRequired(true))
-    .addStringOption(opt =>
-      opt.setName('message')
-        .setDescription('The message to announce.')
         .setRequired(true)),
   requiredRoles: ['1237571670261371011', '1275018612922384455'],
   async execute(interaction)
@@ -29,17 +25,28 @@ module.exports = {
     }
 
     const channel = interaction.options.getChannel('channel');
-    const message = interaction.options.getString('message');
-    
     if (!channel.isTextBased()) 
     {
       return interaction.reply({
-        content: 'That channel cannot receive text messages.',
+        content: 'This channel is not suitable for announcements.',
         ephemeral: true,
       });
     }
 
-    await channel.send(message);
-    await interaction.reply({ content: 'Announcement sent successfully!', ephemeral: true });
+    const modal = new ModalBuilder()
+      .setCustomId(`announceModal-${channel.id}`)
+      .setTitle('Create Announcement');
+
+    const messageInput = new TextInputBuilder()
+      .setCustomId('announcementMessage')
+      .setLabel('Announcement Message')
+      .setStyle(TextInputStyle.Paragraph)
+      .setPlaceholder('Enter your announcement message here...')
+      .setRequired(true)
+
+    const firstActionRow = new ActionRowBuilder()
+      .addComponents(messageInput);
+
+    await interaction.showModal(modal);
   },
 };

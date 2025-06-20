@@ -71,11 +71,21 @@ module.exports = {
 
       if (interaction.customId === 'sendMessageModal')
       {
-        const messageContent = interaction.fields.getTextInputValue('sendMessageContent');
+        const channelId = interaction.customId.split('-')[1];
+        const channel = interaction.guild.channels.cache.get(channelId);
 
-        await interaction.deferReply({ ephemeral: true, });
-        await interaction.channel.send(messageContent);
-        await interaction.editReply({ content: 'Message successfully sent. ' });
+        if (!channel || !channel.isTextBased())
+        {
+          return interaction.reply({
+            content: 'Invalid channel for announcement.',
+            ephemeral: true,
+          });
+        }
+
+        const announcement = interaction.fields.getTextInputValue('announcementMessage');
+
+        await channel.send(announcement);
+        await interaction.reply({ content: `Announcement sent to ${channel}.`, ephemeral: true });
       }
 
       if (interaction.customId === 'editBioModal') 
