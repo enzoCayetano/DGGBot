@@ -9,7 +9,7 @@ Discord: https://discord.gg/DeadGirlGaming
 * ~~change daily to reset at 0:00 UTC rather than a full 24 hours~~ completed!
 * ~~add new create profile command~~
 * ~~implement reputation~~ completed!
-* fix rep bugs
+* ~~fix rep bugs~~ completed!
 * add bio subcommands
 * implement new fun commands
 * implement tourney vc
