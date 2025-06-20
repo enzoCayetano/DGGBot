@@ -10,10 +10,12 @@ module.exports = {
   {
     try 
     {
-      const profile = await createProfile(interaction.user, {
-        points: 10,
-        lastClaimed: null
-      });
+      const profile = await Profile.findOne({ userId: interaction.user.id });
+
+      if (!profile)
+      {
+        return interaction.reply('You do not have a profile yet. Please create one first using `/createprofile`.');
+      }
 
       if (profile.points === 10 && !profile.lastClaimed) 
       {
