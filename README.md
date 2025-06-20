@@ -8,6 +8,10 @@ Discord: https://discord.gg/DeadGirlGaming
 * ~~finish profile embed~~
 * ~~change daily to reset at 0:00 UTC rather than a full 24 hours~~ completed!
 * ~~add new create profile command~~
-* implement reputation
+* implement reputation [in progress]
 * implement new fun commands
+* implement tourney vc
+* implement leaderboard
+
+
 * transition embeds to node canvas

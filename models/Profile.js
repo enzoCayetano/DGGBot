@@ -36,6 +36,21 @@ const profileSchema = new mongoose.Schema({
     min: -256,
     max: 256
   },
+  repGivenToday: {
+    type: [String],
+    required: false,
+    default: []
+  },
+  lastRepTarget: {
+    type: String,
+    required: false,
+    default: null
+  },
+  lastRepDate: {
+    type: Date,
+    required: false,
+    default: null
+  },
   bio: {
     type: String,
     required: true,
