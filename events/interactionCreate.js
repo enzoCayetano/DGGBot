@@ -69,23 +69,34 @@ module.exports = {
         });
       }
 
-      if (interaction.customId === 'sendMessageModal')
+      if (interaction.customId.startsWith('announceModal-'))
       {
         const channelId = interaction.customId.split('-')[1];
         const channel = interaction.guild.channels.cache.get(channelId);
 
-        if (!channel || !channel.isTextBased())
+        try
         {
+          if (!channel || !channel.isTextBased())
+          {
+            return interaction.reply({
+              content: 'Invalid channel for announcement.',
+              ephemeral: true,
+            });
+          }
+
+          const announcement = interaction.fields.getTextInputValue('announcementMessage');
+
+          await channel.send(announcement);
+          await interaction.reply({ content: `Announcement sent to ${channel}.`, ephemeral: true });
+        }
+        catch (err)
+        {
+          console.error('Error sending announcement:', err);
           return interaction.reply({
-            content: 'Invalid channel for announcement.',
+            content: 'Failed to send announcement. Please try again later.',
             ephemeral: true,
           });
         }
-
-        const announcement = interaction.fields.getTextInputValue('announcementMessage');
-
-        await channel.send(announcement);
-        await interaction.reply({ content: `Announcement sent to ${channel}.`, ephemeral: true });
       }
 
       if (interaction.customId === 'editBioModal') 

@@ -44,8 +44,8 @@ module.exports = {
       .setPlaceholder('Enter your announcement message here...')
       .setRequired(true)
 
-    const firstActionRow = new ActionRowBuilder()
-      .addComponents(messageInput);
+    const firstActionRow = new ActionRowBuilder().addComponents(messageInput);
+    modal.addComponents(firstActionRow);
 
     await interaction.showModal(modal);
   },
