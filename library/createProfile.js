@@ -3,10 +3,11 @@ const Profile = require('../models/Profile');
 /**
  * Creates a user profile if it doesn't exist.
  * @param {*} user 
+ * @param {*} member
  * @param {*} options 
  * @returns 
  */
-async function createProfile(user, options = {})
+async function createProfile(user, member, options = {})
 {
   try
   {
@@ -25,7 +26,7 @@ async function createProfile(user, options = {})
       points: 0,
       tournamentsWon: 0,
       lastClaimed: null,
-      joinedAt: new Date()
+      joinedAt: member ? member.joinedAt : new Date(),
     };
 
     const newProfile = new Profile({

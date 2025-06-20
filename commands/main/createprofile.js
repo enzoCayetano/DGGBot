@@ -1,6 +1,8 @@
 const { SlashCommandBuilder } = require('discord.js');
 const Profile = require('../../models/Profile');
 const createProfile = require('../../library/createProfile');
+const updateProfile = require('../../library/updateProfile');
+const roleTitles = require('../../json/roles.json');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -22,7 +24,8 @@ module.exports = {
         }
 
         // create a new profile
-        const newProfile = await createProfile(interaction.user);
+        const newProfile = await createProfile(interaction.user, member);
+        await updateProfile(member, roleTitles);
 
         await interaction.editReply({ content: `Created a new profile for ${member.displayName}.` });
     }
