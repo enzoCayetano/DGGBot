@@ -9,7 +9,15 @@ module.exports = {
   {
     try
     {
-        
+        await interaction.deferReply({ ephemeral: true });
+        const userId = interaction.user.id;
+        const profile = await Profile.findOneAndDelete({ userId });
+        if (!profile) 
+        {
+            return interaction.editReply({ ephemeral: true, content: 'You do not have a profile to delete.' });
+        }
+
+        return interaction.editReply({ ephemeral: true, content: 'Your profile has been successfully deleted.' });
     }
     catch (err)
     {
