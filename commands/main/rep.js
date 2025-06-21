@@ -42,17 +42,24 @@ module.exports = {
             const actorMember = await interaction.guild.members.fetch(actorId);
             const targetMember = await interaction.guild.members.fetch(targetId);
 
-            // check if rep value exists
-            const actorProfile = await Profile.findOneAndUpdate(
-                { userId: actorId },
-                { $setOnInsert: { reputation: 0 } },
-                { upsert: true, new: true }
-            )
-            const targetProfile = await Profile.findOneAndUpdate(
-                { userId: targetId },
-                { $setOnInsert: { reputation: 0 } },
-                { upsert: true, new: true }
-            );
+            const actorProfile = await Profile.findOne({ userId: actorId });
+            const targetProfile = await Profile.findOne({ userId: targetId });
+
+            if (!actorProfile)
+            {
+                return interaction.reply({ 
+                    content: 'You do not have a profile. Please create one first.',
+                    ephemeral: true
+                });
+            }
+
+            if (!targetProfile)
+            {
+                return interaction.reply({
+                    content: `${targetMember.displayName} does not currently have a profile.`,
+                    ephemeral: true
+                });
+            }
 
             if (actorProfile.lastRepDate !== nowDate)
             {
