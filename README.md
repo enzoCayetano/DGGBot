@@ -11,9 +11,13 @@ Discord: https://discord.gg/DeadGirlGaming
 * ~~implement reputation~~ completed!
 * ~~fix rep bugs~~ completed!
 * add bio subcommands
+* implement way to earn xp + level formula
 * implement new fun commands
 * implement tourney vc
-* implement leaderboard
+* implement leaderboard (for points, rep, tournaments, xp, etc)
+* implement gift system
+* implement inventory?
+* make admin panel + separate website
 
 
 * transition embeds to node canvas
