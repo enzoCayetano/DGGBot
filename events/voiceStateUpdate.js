@@ -25,7 +25,7 @@ module.exports = {
         const minutes = Math.floor(duration / 60);
         if (minutes < 1) return;
 
-        const xpGain = minutes * 5;
+        const xpGain = minutes * 2;
 
         const profile = await Profile.findOne({ userId });
         profile.xp += xpGain;
