@@ -14,7 +14,7 @@ Discord: https://discord.gg/DeadGirlGaming
 * ~~implement way to earn xp + level formula~~ completed!
 * ~~add XP to next level to profile~~ completed!
 * ~~change profile colors to use virtuals instead of a whole updateProfile.js~~ scrapped!
-* implement new fun commands
+* add poll command
 * add shop and rework economy
 * implement xp cooldown (resets per day or hours)
 * implement work command
