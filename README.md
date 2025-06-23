@@ -10,8 +10,10 @@ Discord: https://discord.gg/DeadGirlGaming
 * ~~add new create profile command~~
 * ~~implement reputation~~ completed!
 * ~~fix rep bugs~~ completed!
-* add bio subcommands
-* implement way to earn xp + level formula
+* ~~add bio subcommands~~ completed!
+* ~~implement way to earn xp + level formula~~ completed!
+* add XP to next level to profile
+* change profile colors to use virtuals instead of a whole updateProfile.js
 * implement new fun commands
 * implement tourney vc
 * implement leaderboard (for points, rep, tournaments, xp, etc)
