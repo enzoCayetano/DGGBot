@@ -27,7 +27,7 @@ module.exports = {
 
         if (!numberEmojis.includes(emoji)) return;
 
-        const poll = activePolls.get(messageId);
+        const poll = await Poll.findOne({ messageId });
         if (!poll) return;
 
         // check if user already voted
@@ -44,6 +44,14 @@ module.exports = {
         }
 
         poll.voters.push(user.id);
-        await poll.save();
+
+        try
+        {
+            await poll.save();
+        }
+        catch (err)
+        {
+            console.error('Failed to save poll voters:', err);
+        }
     }
 };
