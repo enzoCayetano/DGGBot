@@ -16,6 +16,7 @@ Discord: https://discord.gg/DeadGirlGaming
 * ~~change profile colors to use virtuals instead of a whole updateProfile.js~~ scrapped!
 * ~~add poll command~~ completed!
 * retest poll command, voters are not working as well as results page
+* MAJOR TODO: Document code before further use
 * add shop and rework economy
 * implement xp cooldown (resets per day or hours)
 * implement work command

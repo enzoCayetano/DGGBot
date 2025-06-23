@@ -1,6 +1,10 @@
 const { Events } = require('discord.js');
 const Tag = require('../models/Tag');
+const Profile = require('../models/Profile')
 const prefix = '.';
+
+const xpCooldowns = new Map();
+const XP_COOLDOWN_MS = 60 * 1000;
 
 module.exports = {
   name: Events.MessageCreate,
@@ -10,23 +14,32 @@ module.exports = {
 
     const userId = message.author.id;
 
+    const lastXpGain = xpCooldowns.get(userId) ?? 0;
+    if (Date.now() - lastXpGain < XP_COOLDOWN_MS) return;
+
     try
     {
       const profile = await Profile.findOne ({ userId });
       if (!profile) return;
 
       const xpGain = Math.floor(Math.random() * 11) + 5;
+
       profile.xp += xpGain;
 
-      const nextLevelXP = Math.min(Math.floor(Math.pow(profile.level, 1.5) * 50), 5000); // cap at 5000 XP
-      if (profile.xp >= nextLevelXP)
+      let nextLevelXP = Math.min(Math.floor(Math.pow(profile.level, 1.5) * 50), 5000)
+
+      while (profile.xp >= nextLevelXP)
       {
         profile.level++;
         profile.xp -= nextLevelXP;
-        // await message.channel.send(`${message.author}, you leveled up to level ${profile.level}!`);
+        nextLevelXP = Math.min(Math.floor(Math.pow(profile.level, 1.5) * 50), 5000);
       }
 
+      if (profile.xp < 0) profile.xp = 0;
+
       await profile.save();
+
+      xpCooldowns.set(userId, Date.now());
     }
     catch (err)
     {
