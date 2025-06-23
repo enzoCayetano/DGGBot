@@ -60,7 +60,21 @@ module.exports = {
     catch (err) 
     {
       console.error(err);
-      return interaction.reply('An error occurred while fetching the profile.');
+      
+      if (!interaction.replied && !interaction.deferred)
+      {
+        return interaction.reply({
+          content: 'An error occurred while fetching the profile.',
+          ephemeral: true,
+        });
+      }
+      else
+      {
+        return interaction.followUp({
+          content: 'An error occurred while fetching the profile.',
+          ephemeral: true,
+        });
+      }
     }
   },
 };
