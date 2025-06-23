@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, } = require('discord.js');
+const Profile = require('../../models/Profile');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -12,6 +13,8 @@ module.exports = {
         .setDescription('Clear your biography.')),
   async execute(interaction) 
   {
+  const sub = interaction.options.getSubcommand();
+
     if (sub === 'edit')
     {
       const modal = new ModalBuilder()
