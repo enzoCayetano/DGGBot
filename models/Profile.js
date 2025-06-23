@@ -79,4 +79,12 @@ const profileSchema = new mongoose.Schema({
   }
 });
 
+profileSchema.virtual('xpToNextLevel').get(function() {
+  const required = Math.min(Math.floor(Math.pow(this.level, 1.5) * 50), 5000);
+  return required - this.xp;
+})
+
+profileSchema.set('toJSON', { virtuals: true });
+profileSchema.set('toObject', { virtuals: true});
+
 module.exports = mongoose.model('Profile', profileSchema);
