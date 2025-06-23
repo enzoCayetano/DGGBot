@@ -15,10 +15,10 @@ Discord: https://discord.gg/DeadGirlGaming
 * ~~add XP to next level to profile~~ completed!
 * ~~change profile colors to use virtuals instead of a whole updateProfile.js~~ scrapped!
 * ~~add poll command~~ completed!
-* retest poll command, voters are not working as well as results page
+* ~~retest poll command, voters are not working as well as results page~~ completed!
+* ~~implement xp cooldown (resets per day or hours)~~ completed! (cooldown = 1min)
 * MAJOR TODO: Document code before further use
 * add shop and rework economy
-* implement xp cooldown (resets per day or hours)
 * implement work command
 * implement tasks/missions?
 * xp gain for boosters
