@@ -15,6 +15,11 @@ Discord: https://discord.gg/DeadGirlGaming
 * ~~add XP to next level to profile~~ completed!
 * ~~change profile colors to use virtuals instead of a whole updateProfile.js~~ scrapped!
 * implement new fun commands
+* add shop and rework economy
+* implement xp cooldown (resets per day or hours)
+* implement work command
+* implement tasks/missions?
+* xp gain for boosters
 * implement tourney vc
 * implement leaderboard (for points, rep, tournaments, xp, etc)
 * implement gift system
