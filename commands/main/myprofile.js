@@ -22,6 +22,7 @@ module.exports = {
 
     try 
     {
+      await updateProfile(member, roleTitles);
       const profile = await Profile.findOne({ userId });
 
       // check if profile exists
@@ -32,8 +33,6 @@ module.exports = {
           ephemeral: true
         });
       }
-
-      await updateProfile(member, roleTitles);
 
       const embed = new EmbedBuilder()
         .setTitle(`${member.displayName}`)
