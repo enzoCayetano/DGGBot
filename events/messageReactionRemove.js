@@ -8,7 +8,7 @@ const numberEmojis = [
 ];
 
 module.exports = {
-    name: Events.MessageReactionAdd,
+    name: Events.MessageReactionRemove,
     async execute(reaction, user)
     {
         if (user.bot) return; 
@@ -31,28 +31,18 @@ module.exports = {
         const poll = await Poll.findOne({ messageId });
         if (!poll) return;
 
-        // check if user already voted
-        if (poll.voters.includes(user.id)) 
+        const index = poll.voters.indexOf(user.id);
+        if (index > -1)
         {
+            poll.voters.splice(index, 1);
             try
             {
-                await reaction.users.remove(user.id);
+                await poll.save();
             }
-            catch (error) 
+            catch (err)
             {
-                console.error('Failed to remove duplicate vote:', error);
+                console.error('Failed to save poll voters on removal:', err);
             }
-        }
-
-        poll.voters.push(user.id);
-
-        try
-        {
-            await poll.save();
-        }
-        catch (err)
-        {
-            console.error('Failed to save poll voters:', err);
         }
     }
 };
