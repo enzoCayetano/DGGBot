@@ -28,6 +28,7 @@ module.exports = {
         const xpGain = minutes * 2;
 
         const profile = await Profile.findOne({ userId });
+        if (!profile) return;
         profile.xp += xpGain;
 
         const nextLevelXP = Math.min(Math.floor(Math.pow(profile.level, 1.5) * 50), 5000); // cap at 5000 XP
