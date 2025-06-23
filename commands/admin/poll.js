@@ -115,44 +115,65 @@ module.exports = {
                     if (!storedPoll) return;
 
                     const message = await interaction.channel.messages.fetch(storedPoll.messageId);
-                    const reactions = message.reactions.cache;
+                    
+                    for (let i = 0; i < storedPoll.options.length; i++)
+                    {
+                        const emoji = numberEmojis[i];
+                        const reaction = message.reactions.cache.get(emoji);
+                        if (reaction)
+                        {
+                            await reaction.fetch();
+                        }
+                    }
 
                     const results = [];
 
-                    for (let i = 0; i < storedPoll.options.length; i++) 
+                    for (let i = 0; i < storedPoll.options.length; i++)
                     {
                         const emoji = numberEmojis[i];
-                        const reaction = reactions.get(emoji);
-                        const count = (await reaction?.fetch())?.count || 1;
+                        const reaction = message.reactions.cache.get(emoji);
+                        let count = 0;
+
+                        if (reaction)
+                        {
+                            count = reaction.count;
+
+                            const botReacted = reaction.users.cache.has(interaction.client.user.id);
+                            if (botReacted)
+                            {
+                                count--;
+                            }
+                        }
+
                         results.push({
                             option: storedPoll.options[i],
-                            votes: count - 1
+                            votes: count > 0 ? count : 0,
                         });
                     }
 
-                    results.sort((a, b) => b.votes - a.votes);
+                        results.sort((a, b) => b.votes - a.votes);
 
-                    const resultEmbed = new EmbedBuilder()
-                        .setTitle(`Poll Results: ${storedPoll.title}`)
-                        .setDescription(storedPoll.question)
-                        .setColor('#c922c3')
-                        .addFields(
-                            results.map(r => ({
-                                name: r.option,
-                                value: `${r.votes} vote${r.votes !== 1 ? 's' : ''}`,
-                                inline: false
-                            }))
-                        )
-                        .setTimestamp()
-                    
-                        await interaction.channel.send({ embeds: [resultEmbed] });
+                        const resultEmbed = new EmbedBuilder()
+                            .setTitle(`Poll Results: ${storedPoll.title}`)
+                            .setDescription(storedPoll.question)
+                            .setColor('#c922c3')
+                            .addFields(
+                                results.map(r => ({
+                                    name: r.option,
+                                    value: `${r.votes} vote${r.votes !== 1 ? 's' : ''}`,
+                                    inline: false,
+                                }))
+                            )
+                            .setTimestamp();
+
+                        await interaction.channel.send({ embeds: [resultEmbed] })
 
                         await storedPoll.deleteOne();
-                }
-                catch (err)
-                {
-                    console.error('Failed to end poll:', err);
-                }
+                    }
+                    catch (err)
+                    {
+                        console.error('Failed to end poll:', err);
+                    }
             }, durationMs);
         }
         catch (error) 
