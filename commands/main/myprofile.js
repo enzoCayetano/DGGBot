@@ -41,11 +41,12 @@ module.exports = {
         .addFields(
           { name: 'Title', value: roleTitles[profile.title]?.title, inline: true },
           { name: 'XP', value: profile.xp.toString(), inline: true },
-          { name: 'XP to Next Level', value: Math.max(0, profile.xpToNextLevel.toString()), inline: true },
+          { name: 'XP to Next Level', value: (Math.max(0, profile.xpToNextLevel)).toString(), inline: false },
           { name: 'Level', value: profile.level.toString(), inline: true },
           { name: 'Reputation', value: profile.reputation.toString(), inline: true },
           { name: 'Bio', value: profile.bio || 'No bio set.', inline: false },
-          { name: 'Points', value: profile.points.toString(), inline: true },
+          { name: 'Points', value: profile.points.toString(), inline: false },
+          { name: 'Tournaments Won', value: profile.tournamentsWon.toString(), inline: false },
           { name: 'Joined At', value: `<t:${Math.floor(profile.joinedAt.getTime() / 1000)}:D>`, inline: true },
           { name: 'Last Daily Claimed', value: profile.lastClaimed
             ? `<t:${Math.floor(profile.lastClaimed.getTime() / 1000)}:R>`
