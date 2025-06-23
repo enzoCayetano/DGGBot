@@ -5,7 +5,7 @@ const createProfile = require('../../library/createProfile');
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('daily')
-    .setDescription('Collect daily points.'),
+    .setDescription('Collect daily Riokens.'),
   async execute(interaction)
   {
     try 
@@ -15,11 +15,6 @@ module.exports = {
       if (!profile)
       {
         return interaction.reply('You do not have a profile yet. Please create one first using `/createprofile`.');
-      }
-
-      if (profile.points === 10 && !profile.lastClaimed) 
-      {
-        return interaction.reply('New profile created! You have received **10** points.');
       }
 
       const now = new Date();
@@ -36,7 +31,7 @@ module.exports = {
 
           const msLeft = nextReset - now;
           const hoursLeft = Math.ceil(msLeft / (1000 * 60 * 60));
-          return interaction.reply(`You have already claimed your daily points today. Please try again in ${hoursLeft} hour(s)!`);
+          return interaction.reply(`You have already claimed your daily Riokens today. Please try again in ${hoursLeft} hour(s)!`);
         }
       }
 
@@ -44,7 +39,7 @@ module.exports = {
       profile.lastClaimed = now;
       await profile.save();
 
-      return interaction.reply(`You've claimed your daily reward and now have **${profile.points}** points!`);
+      return interaction.reply(`You've claimed your daily reward and now have **${profile.points}** Riokens!`);
     } 
     catch (err) 
     {

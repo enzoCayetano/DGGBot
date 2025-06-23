@@ -45,7 +45,7 @@ module.exports = {
           { name: 'Level', value: profile.level.toString(), inline: true },
           { name: 'Reputation', value: profile.reputation.toString(), inline: true },
           { name: 'Bio', value: profile.bio || 'No bio set.', inline: false },
-          { name: 'Points', value: profile.points.toString(), inline: false },
+          { name: 'Riokens', value: profile.points.toString(), inline: false },
           { name: 'Tournaments Won', value: profile.tournamentsWon.toString(), inline: false },
           { name: 'Joined At', value: `<t:${Math.floor(profile.joinedAt.getTime() / 1000)}:D>`, inline: true },
           { name: 'Last Daily Claimed', value: profile.lastClaimed
