@@ -41,6 +41,7 @@ module.exports = {
         .addFields(
           { name: 'Title', value: roleTitles[profile.title]?.title, inline: true },
           { name: 'XP', value: profile.xp.toString(), inline: true },
+          { name: 'XP to Next Level', value: Math.max(0, profile.xpToNextLevel.toString()), inline: true },
           { name: 'Level', value: profile.level.toString(), inline: true },
           { name: 'Reputation', value: profile.reputation.toString(), inline: true },
           { name: 'Bio', value: profile.bio || 'No bio set.', inline: false },
