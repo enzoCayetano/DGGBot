@@ -10,10 +10,10 @@ module.exports = {
                 .setRequired(true))
         .addIntegerOption(option =>
             option.setName('players')
-                .setDescription('Number of players needed (1-3)')
+                .setDescription('Number of players needed (1-4)')
                 .setRequired(true)
                 .setMinValue(1)
-                .setMaxValue(3)),
+                .setMaxValue(4)),
         async execute(interaction)
         {
             const leaderId = interaction.user.id;
@@ -103,8 +103,32 @@ module.exports = {
                         return;
                     }
 
+                    if (i.user.id === leaderId && group.size === 1) 
+                    {
+                        await i.reply({ content: 'As the leader, you must cancel the group instead of leaving. Use the "Cancel Group" button.', ephemeral: true });
+                        return;
+                    }
+
                     group.delete(i.user.id);
-                    const updatedEmbed = new EmbedBuilder()
+                    if (i.user.id === leaderId && group.size > 0)
+                    {
+                        leaderId = [...group][0];
+                        const newLeader = await interaction.guild.members.fetch(leaderId);
+                        const updatedEmbed = new EmbedBuilder()
+                            .setTitle('Pick Up Group')
+                            .setDescription(`A new pickup group is forming! Need ${maxPlayers} players.
+                                \n**Game:** ${role}
+                                \n**Leader:** <@${leaderId}> (${newLeader.displayName})
+                                \n**Current Players (${group.size}/${maxPlayers}):**
+                                \n${[...group].map(id => `<@${id}>`).join('\n')}`)
+                            .setColor('#00FF00')
+                            .setTimestamp();
+
+                        await i.update({ embeds: [updatedEmbed], components: [row] });
+                    }
+                    else
+                    {
+                        const updatedEmbed = new EmbedBuilder()
                         .setTitle('Pickup Group')
                         .setDescription(
                             group.size > 0
@@ -120,7 +144,8 @@ module.exports = {
                         .setColor('#00FF00')
                         .setTimestamp();
 
-                    await i.update({ embeds: [updatedEmbed], components: [row] });
+                        await i.update({ embeds: [updatedEmbed], components: [row] });
+                    }
                 }
                 else if (i.customId === 'lock_pickup')
                 {
