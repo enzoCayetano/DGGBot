@@ -54,7 +54,7 @@ module.exports = {
             const row = new ActionRowBuilder().addComponents(joinButton, leaveButton, lockButton, cancelButton);
 
             await interaction.reply({
-                content: `${role} A new pickup group is starting!`,
+                content: `<@&${role.id}> A new pickup group is starting!`,
                 embeds: [embed],
                 components: [row],
             });
