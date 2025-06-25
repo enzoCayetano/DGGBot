@@ -31,7 +31,7 @@ module.exports = {
         const lastClaimedDate = new Date(profile.lastClaimed).toISOString().split('T')[0];
 
         // Block if claimed today
-        if (nowUTCDate === today) 
+        if (lastClaimedDate === today) 
         {
           return interaction.reply(`You have already claimed your daily Riokens today. Please try again in ${hoursLeft} hour(s)!`);
         }
