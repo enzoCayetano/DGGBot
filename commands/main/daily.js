@@ -33,7 +33,7 @@ module.exports = {
         // Block if claimed today
         if (lastClaimedDate === today) 
         {
-          return interaction.reply(`You have already claimed your daily Riokens today. Please try again in ${hoursLeft} hour(s)!`);
+          return interaction.reply('You have already claimed your daily Riokens today. Come back tomorrow!');
         }
       }
 
