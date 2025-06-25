@@ -19,14 +19,18 @@ Discord: https://discord.gg/DeadGirlGaming
 * ~~implement xp cooldown (resets per day or hours)~~ completed! (cooldown = 1min)
 * ~~MAJOR TODO: Document code before further use~~ completed!
 * ~~change pug embed colors~~ completed!
-* add shop and rework economy
-* implement work command
+* ~~add bank and rework economy~~ completed!
+* implement work command !!
+* implement bank interest
 * implement tasks/missions?
+* implement sending people Riokens
+* QOL changes for bank (e.g. all/999999 to dep/with all money)
 * xp gain for boosters
 * implement tourney vc
 * implement leaderboard (for points, rep, tournaments, xp, etc)
 * implement gift system
 * implement inventory?
+* implement loan/lottery system for the bank
 * make admin panel + separate website
 
 
