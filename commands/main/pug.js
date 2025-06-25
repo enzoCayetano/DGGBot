@@ -71,7 +71,7 @@ module.exports = {
             .setDescription(`${member.displayName} is forming a new pickup group! Looking for ${maxPlayers} players.
                 \n**Game:** ${role}
                 \n**Current Players (${group.size}/${maxPlayers}):**\n<@${[...group][0]}>`)
-            .setColor('#00FF00')
+            .setColor('#bb70e0')
             .setTimestamp();
 
         const row = new ActionRowBuilder().addComponents(joinButton, leaveButton, lockButton, cancelButton);
@@ -109,7 +109,7 @@ module.exports = {
                             \n**Role:** ${role.name}
                             \n**Current Players (${group.size}/${maxPlayers}):**
                             \n${[...group].map(id => `<@${id}>`).join('\n')}`)
-                        .setColor('#00FF00')
+                        .setColor('#bb70e0')
                         .setTimestamp();
 
                     await i.update({ embeds: [updatedEmbed], components: [row] });
@@ -136,7 +136,7 @@ module.exports = {
                                 \n**Leader:** <@${leaderId}> (${newLeader.displayName})
                                 \n**Current Players (${group.size}/${maxPlayers}):**
                                 \n${[...group].map(id => `<@${id}>`).join('\n')}`)
-                            .setColor('#00FF00')
+                            .setColor('#bb70e0')
                             .setTimestamp();
 
                         await i.update({ embeds: [updatedEmbed], components: [row] });
@@ -156,7 +156,7 @@ module.exports = {
                                     \n**Current Players (0/${maxPlayers}):**
                                     \nNo players yet.`
                             )
-                            .setColor('#00FF00')
+                            .setColor('#bb70e0')
                             .setTimestamp();
 
                         await i.update({ embeds: [updatedEmbed], components: [row] });
@@ -176,7 +176,7 @@ module.exports = {
                             \n**Game:** ${role.name}
                             \n**Players (${group.size}/${maxPlayers}):**
                             \n${[...group].map(id => `<@${id}>`).join('\n')}`)
-                        .setColor('#0000FF')
+                        .setColor('#db09ca')
                         .setTimestamp();
 
                     await i.message.edit({
@@ -197,7 +197,7 @@ module.exports = {
                     const cancelEmbed = new EmbedBuilder()
                         .setTitle('Pickup Group Cancelled')
                         .setDescription('This pickup group has been cancelled by the leader.')
-                        .setColor('#FF0000')
+                        .setColor('#78102a')
                         .setTimestamp();
 
                     await i.message.edit({
@@ -226,7 +226,7 @@ module.exports = {
                 const expiredEmbed = new EmbedBuilder()
                     .setTitle('Pickup Group Expired')
                     .setDescription('This pickup group has expired.')
-                    .setColor('#FF0000')
+                    .setColor('#78102a')
                     .setTimestamp();
 
                 await message.edit({ embeds: [expiredEmbed], components: [] });
