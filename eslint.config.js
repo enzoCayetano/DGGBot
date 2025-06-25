@@ -15,7 +15,6 @@ module.exports = [
 			'max-statements-per-line': ['error', { max: 2 }],
 			'no-console': 'off',
 			'no-floating-decimal': 'error',
-			'no-inline-comments': 'error',
 			'no-lonely-if': 'error',
 			'no-multi-spaces': 'error',
 			'no-shadow': ['error', { allow: ['err', 'resolve', 'reject'] }],

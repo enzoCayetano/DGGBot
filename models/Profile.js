@@ -14,7 +14,7 @@ const profileSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
-    default: "1239311742694199388",
+    default: '1239311742694199388',
     trim: true
   },
   xp: {
@@ -63,6 +63,17 @@ const profileSchema = new mongoose.Schema({
     default: 0,
     min: 0
   },
+  dailyStreak: {
+    type: Number,
+    require: false,
+    default: 0,
+    min: 0
+  },
+  highestStreak: {
+    type: Number,
+    default: 0,
+    min: 0
+  },
   tournamentsWon: {
     type: Number,
     default: 0,
@@ -82,9 +93,9 @@ const profileSchema = new mongoose.Schema({
 profileSchema.virtual('xpToNextLevel').get(function() {
   const required = Math.min(Math.floor(Math.pow(this.level, 1.5) * 50), 5000);
   return required - this.xp;
-})
+});
 
 profileSchema.set('toJSON', { virtuals: true });
-profileSchema.set('toObject', { virtuals: true});
+profileSchema.set('toObject', { virtuals: true });
 
 module.exports = mongoose.model('Profile', profileSchema);

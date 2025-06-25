@@ -20,7 +20,7 @@ async function createProfile(user, member, options = {})
     // Default profile fields
     const defaults =
     {
-      title: "1239311742694199388",
+      title: '1239311742694199388',
       xp: 0,
       level: 1,
       reputation: 0,
@@ -30,6 +30,7 @@ async function createProfile(user, member, options = {})
       bio: 'No bio set.',
       points: 0,
       tournamentsWon: 0,
+      dailyStreak: 0,
       lastClaimed: null,
       joinedAt: member ? member.joinedAt : new Date(),
     };
