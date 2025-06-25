@@ -18,7 +18,7 @@ Discord: https://discord.gg/DeadGirlGaming
 * ~~retest poll command, voters are not working as well as results page~~ completed!
 * ~~implement xp cooldown (resets per day or hours)~~ completed! (cooldown = 1min)
 * ~~MAJOR TODO: Document code before further use~~ completed!
-* change pug embed colors
+* ~~change pug embed colors~~ completed!
 * add shop and rework economy
 * implement work command
 * implement tasks/missions?
