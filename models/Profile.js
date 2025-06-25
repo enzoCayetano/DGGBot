@@ -74,6 +74,16 @@ const profileSchema = new mongoose.Schema({
     default: 0,
     min: 0
   },
+  bankBalance: {
+    type: Number,
+    default: 0,
+    min: 0
+  },
+  bankLevel: {
+    type: Number,
+    default: 1,
+    min: 1
+  },
   tournamentsWon: {
     type: Number,
     default: 0,

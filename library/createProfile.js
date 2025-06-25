@@ -29,6 +29,8 @@ async function createProfile(user, member, options = {})
       lastRepDate: null,
       bio: 'No bio set.',
       points: 0,
+      bankBalance: 0,
+      bankLevel: 1,
       tournamentsWon: 0,
       dailyStreak: 0,
       lastClaimed: null,

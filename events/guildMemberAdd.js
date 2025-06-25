@@ -18,7 +18,7 @@ module.exports = {
       .setDescription(
         `Welcome to Dead Girl Gaming, ${member.user.toString()}! Check out our ` +
         `[rules](https://discord.com/channels/1226974556636450856/1227383792554086420), ` +
-        `[info](https://discord.com/channels/1226974556636450856/1234254464718733323), and introduce yourself in the ` +
+        `[roles](https://discord.com/channels/1226974556636450856/1234254464718733323), and introduce yourself in the ` +
         `[introductions](https://discord.com/channels/1226974556636450856/1227387874282963085) channel.`
       )
       .setTimestamp();

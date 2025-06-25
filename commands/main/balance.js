@@ -28,7 +28,7 @@ module.exports = {
 
       // Show user balance
       await interaction.editReply({ 
-        content: `You currently have **${profile.points}** points.` 
+        content: `You currently have **${profile.points}** Riokens.` 
       });
     }
     catch (err)
