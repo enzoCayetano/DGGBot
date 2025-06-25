@@ -1,7 +1,8 @@
-const { SlashCommandBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, } = require('discord.js');
+const { SlashCommandBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder } = require('discord.js');
 const Profile = require('../../models/Profile');
 
 module.exports = {
+  // Slash command setup with 'edit' and 'clear' subcommands
   data: new SlashCommandBuilder()
     .setName('bio')
     .setDescription('Edit your user bio.')
@@ -11,10 +12,12 @@ module.exports = {
     .addSubcommand(sub =>
       sub.setName('clear')
         .setDescription('Clear your biography.')),
+
   async execute(interaction) 
   {
-  const sub = interaction.options.getSubcommand();
+    const sub = interaction.options.getSubcommand();
 
+    // Show modal for editing bio
     if (sub === 'edit')
     {
       const modal = new ModalBuilder()
@@ -35,6 +38,7 @@ module.exports = {
 
       await interaction.showModal(modal);
     }
+    // Clear existing bio if it exists
     else if (sub === 'clear')
     {
       const profile = await Profile.findOne({ userId: interaction.user.id });

@@ -2,6 +2,7 @@ const { SlashCommandBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, Act
 const Tag = require('../../models/Tag');
 
 module.exports = {
+  // Slash command setup with subcommands
   data: new SlashCommandBuilder()
     .setName('tag')
     .setDescription('Manage tags.')
@@ -31,12 +32,15 @@ module.exports = {
       subcommand
         .setName('list')
         .setDescription('List all existing.')),
+        
+  // Required role IDs
   requiredRoles: ['1237571670261371011', '1275018612922384455'],
+
   async execute(interaction)
   {
     const subcommand = interaction.options.getSubcommand();
 
-    // check for role
+    // Check if user has one of the required roles
     const userHasRequiredRole = interaction.member.roles.cache.some(role =>
       this.requiredRoles.includes(role.id)
     );
@@ -49,7 +53,7 @@ module.exports = {
       });
     }
 
-    // check if role is in server
+    // Ensure command is used in a server for certain subcommands
     if (
       ['create', 'delete'].includes(subcommand) &&
       (!interaction.guild || !interaction.member?.roles)
@@ -60,9 +64,9 @@ module.exports = {
       });
     }
 
+    // Handle 'create' tag subcommand
     if (subcommand === 'create')
     {
-
       const modal = new ModalBuilder()
         .setCustomId('createTagModal')
         .setTitle('Create New Tag');
@@ -86,6 +90,7 @@ module.exports = {
 
       await interaction.showModal(modal);
     }
+    // Handle 'edit' tag subcommand
     else if (subcommand === 'edit')
     {
       const name = interaction.options.getString('name').toLowerCase();
@@ -134,6 +139,7 @@ module.exports = {
 
       await interaction.showModal(modal);
     }
+    // Handle 'delete' tag subcommand
     else if (subcommand === 'delete')
     {
       const name = interaction.options.getString('name').toLowerCase();
@@ -153,6 +159,7 @@ module.exports = {
         ephemeral: true,
       });
     }
+    // Handle 'list' tag subcommand
     else if (subcommand === 'list') 
     {
       const tags = await Tag.find({});

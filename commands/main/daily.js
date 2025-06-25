@@ -3,15 +3,19 @@ const Profile = require('../../models/Profile');
 const createProfile = require('../../library/createProfile');
 
 module.exports = {
+  // Slash command setup
   data: new SlashCommandBuilder()
     .setName('daily')
     .setDescription('Collect daily Riokens.'),
+
   async execute(interaction)
   {
     try 
     {
+      // Look up user profile
       const profile = await Profile.findOne({ userId: interaction.user.id });
 
+      // Require profile to continue
       if (!profile)
       {
         return interaction.reply('You do not have a profile yet. Please create one first using `/createprofile`.');
@@ -19,11 +23,13 @@ module.exports = {
 
       const now = new Date();
 
+      // Check if daily has already been claimed
       if (profile.lastClaimed) 
       {
         const nowUTCDate = now.toISOString().split('T')[0];
         const lastClaimedUTCDate = new Date(profile.lastClaimed).toISOString().split('T')[0];
 
+        // Block if claimed today
         if (nowUTCDate === lastClaimedUTCDate) 
         {
           const nextReset = new Date(nowUTCDate + 'T00:00:00Z');
@@ -31,10 +37,12 @@ module.exports = {
 
           const msLeft = nextReset - now;
           const hoursLeft = Math.ceil(msLeft / (1000 * 60 * 60));
+
           return interaction.reply(`You have already claimed your daily Riokens today. Please try again in ${hoursLeft} hour(s)!`);
         }
       }
 
+      // Award daily reward
       profile.points += 10;
       profile.lastClaimed = now;
       await profile.save();
@@ -43,6 +51,7 @@ module.exports = {
     } 
     catch (err) 
     {
+      // Log and report error
       console.error(err);
       return interaction.reply('Something went wrong. Please try again later.');
     }

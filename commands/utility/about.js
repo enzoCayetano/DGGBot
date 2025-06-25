@@ -6,6 +6,6 @@ module.exports = {
     .setDescription('About this bot!'),
   async execute(interaction)
   {
-    await interaction.reply('This bot was programmed by swag for dggcord. Shout out mommy wiv and daddy cill <3');
+    await interaction.reply('This bot was programmed by swag.');
   },
 };

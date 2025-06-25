@@ -2,19 +2,24 @@ const Profile = require('../models/Profile');
 
 /**
  * Creates a user profile if it doesn't exist.
- * @param {*} user 
- * @param {*} member
- * @param {*} options 
- * @returns 
+ * @param {Object} user - The Discord user object.
+ * @param {Object} member - The Discord guild member object.
+ * @param {Object} [options={}] - Optional overrides for profile fields.
+ * @returns {Promise<Object>} The existing or newly created profile document.
+ * @throws Will throw an error if profile creation fails.
  */
 async function createProfile(user, member, options = {})
 {
   try
   {
+    // Check if profile already exists
     const existingProfile = await Profile.findOne({ userId: user.id });
-    if (existingProfile) return existingProfile;
+    if (existingProfile)
+      return existingProfile;
 
-    const defaults = {
+    // Default profile fields
+    const defaults =
+    {
       title: "1239311742694199388",
       xp: 0,
       level: 1,
@@ -29,13 +34,16 @@ async function createProfile(user, member, options = {})
       joinedAt: member ? member.joinedAt : new Date(),
     };
 
-    const newProfile = new Profile({
+    // Create new profile with defaults and optional overrides
+    const newProfile = new Profile(
+    {
       username: user.username,
       userId: user.id,
       ...defaults,
       ...options
     });
 
+    // Save and return new profile
     await newProfile.save();
     return newProfile;
   }

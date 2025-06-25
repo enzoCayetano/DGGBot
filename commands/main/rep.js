@@ -30,132 +30,137 @@ module.exports = {
                 option.setName('target')
                     .setDescription('The user to check reputation for.')
                     .setRequired(false))),
-    async execute(interaction)
+                    
+  async execute(interaction)
+  {
+    try
     {
-        try
-        {
-            const sub = interaction.options.getSubcommand();
-            const user = interaction.options.getUser('target') || interaction.user;
-            const actorId = interaction.user.id;
-            const targetId = user.id;
-            const nowDate = new Date().toISOString().split('T')[0];
-            const actorMember = await interaction.guild.members.fetch(actorId);
-            const targetMember = await interaction.guild.members.fetch(targetId);
+      const sub = interaction.options.getSubcommand();
+      const user = interaction.options.getUser('target') || interaction.user;
+      const actorId = interaction.user.id;
+      const targetId = user.id;
+      const nowDate = new Date().toISOString().split('T')[0];
 
-            const actorProfile = await Profile.findOne({ userId: actorId });
-            const targetProfile = await Profile.findOne({ userId: targetId });
+      const actorMember = await interaction.guild.members.fetch(actorId);
+      const targetMember = await interaction.guild.members.fetch(targetId);
 
-            if (!actorProfile)
-            {
-                return interaction.reply({ 
-                    content: 'You do not have a profile. Please create one first.',
-                    ephemeral: true
-                });
-            }
+      const actorProfile = await Profile.findOne({ userId: actorId });
+      const targetProfile = await Profile.findOne({ userId: targetId });
 
-            if (!targetProfile)
-            {
-                return interaction.reply({
-                    content: `${targetMember.displayName} does not currently have a profile.`,
-                    ephemeral: true
-                });
-            }
+      // Ensure profiles exist
+      if (!actorProfile)
+      {
+        return interaction.reply({ 
+          content: 'You do not have a profile. Please create one first.',
+          ephemeral: true
+        });
+      }
 
-            if (actorProfile.lastRepDate !== nowDate)
-            {
-                actorProfile.repGivenToday = [];
-                actorProfile.lastRepTarget = null;
-                actorProfile.lastRepDate = nowDate;
-            }
+      if (!targetProfile)
+      {
+        return interaction.reply({
+          content: `${targetMember.displayName} does not currently have a profile.`,
+          ephemeral: true
+        });
+      }
 
-            if (sub === 'check')
-            {
-                await interaction.reply({ 
-                    content: `${targetMember.displayName} has a reputation of '${targetProfile.reputation}'.`,
-                });
-                return;
-            }
+      // Reset daily reputation tracking if date changed
+      if (actorProfile.lastRepDate !== nowDate)
+      {
+        actorProfile.repGivenToday = [];
+        actorProfile.lastRepTarget = null;
+        actorProfile.lastRepDate = nowDate;
+      }
 
-            if (targetId === actorId)
-            {
-                return interaction.reply({ 
-                    content: 'You cannot give reputation to yourself.',
-                    ephemeral: true
-                });
-            }
+      // /rep check command
+      if (sub === 'check')
+      {
+        await interaction.reply({ 
+          content: `${targetMember.displayName} has a reputation of '${targetProfile.reputation}'.`,
+        });
+        return;
+      }
 
-            if (actorProfile.repGivenToday.includes(targetId))
-            {
-                return interaction.reply({ 
-                    content: `You have already given reputation to ${targetMember.displayName} today.`,
-                    ephemeral: true
-                });
-            }
+      // Prevent self-repping
+      if (targetId === actorId)
+      {
+        return interaction.reply({ 
+          content: 'You cannot give reputation to yourself.',
+          ephemeral: true
+        });
+      }
 
-            if (actorProfile.lastRepTarget === targetId)
-            {
-                return interaction.reply({ 
-                    content: `You have already given reputation to ${targetMember.displayName} today.`,
-                    ephemeral: true
-                });
-            }
+      // Prevent giving rep more than once to the same user
+      if (actorProfile.repGivenToday.includes(targetId) || actorProfile.lastRepTarget === targetId)
+      {
+        return interaction.reply({ 
+          content: `You have already given reputation to ${targetMember.displayName} today.`,
+          ephemeral: true
+        });
+      }
 
-            if (actorProfile.repGivenToday.length >= 5)
-            {
-                return interaction.reply({ 
-                    content: 'You have reached the maximum number of users you can rep today.',
-                    ephemeral: true
-                });
-            }
+      // Limit daily rep interactions
+      if (actorProfile.repGivenToday.length >= 5)
+      {
+        return interaction.reply({ 
+          content: 'You have reached the maximum number of users you can rep today.',
+          ephemeral: true
+        });
+      }
 
-            const amount = (sub === 'up') ? 1 : -1;
-            const newRep = targetProfile.reputation + amount;
+      // Calculate new reputation
+      const amount = (sub === 'up') ? 1 : -1;
+      const newRep = targetProfile.reputation + amount;
 
-            if (newRep > MAX_REP)
-            {
-                return interaction.reply({ 
-                    content: `${targetMember.displayName} has reached the maximum reputation limit of ${MAX_REP}.`,
-                    ephemeral: true
-                });
-            }
-            else if (newRep < MIN_REP)
-            {
-                return interaction.reply({ 
-                    content: `${targetMember.displayName} has reached the minimum reputation limit of ${MIN_REP}.`,
-                    ephemeral: true
-                });
-            }
+      // Check reputation bounds
+      if (newRep > MAX_REP)
+      {
+        return interaction.reply({ 
+          content: `${targetMember.displayName} has reached the maximum reputation limit of ${MAX_REP}.`,
+          ephemeral: true
+        });
+      }
+      else if (newRep < MIN_REP)
+      {
+        return interaction.reply({ 
+          content: `${targetMember.displayName} has reached the minimum reputation limit of ${MIN_REP}.`,
+          ephemeral: true
+        });
+      }
 
-            targetProfile.reputation = newRep;
-            await targetProfile.save();
+      // Update target's reputation
+      targetProfile.reputation = newRep;
+      await targetProfile.save();
 
-            actorProfile.repGivenToday.push(targetId);
-            actorProfile.lastRepTarget = targetId;
-            actorProfile.lastRepDate = nowDate;
-            await actorProfile.save();
+      // Update actor's rep history
+      actorProfile.repGivenToday.push(targetId);
+      actorProfile.lastRepTarget = targetId;
+      actorProfile.lastRepDate = nowDate;
+      await actorProfile.save();
 
-            await interaction.reply({ 
-                content: `You have successfully given ${amount > 0 ? 'positive' : 'negative'} reputation to ${targetMember.displayName}. Their new reputation is now ${targetProfile.reputation}.`,
-                ephemeral: true
-            });
+      // Confirm to user
+      await interaction.reply({ 
+        content: `You have successfully given ${amount > 0 ? 'positive' : 'negative'} reputation to ${targetMember.displayName}. Their new reputation is now ${targetProfile.reputation}.`,
+        ephemeral: true
+      });
 
-            // log the reputation change
-            const logChannel = interaction.guild.channels.cache.get(MOD_LOG_CHANNEL_ID);
-            if (logChannel)
-            {
-                logChannel.send({
-                    content: `${actorMember.displayName} (${actorId}) has given ${amount > 0 ? 'positive' : 'negative'} reputation to ${targetMember.displayName} (${targetId}). New reputation: ${targetProfile.reputation}.`
-                });
-            }
-            else
-            {
-                console.warn('Mod log channel not found. Please set MOD_LOG_CHANNEL_ID in the config.');
-            }
-        }
-        catch (err)
-        {
-            console.error(err);
-            return interaction.reply({ ephemeral: true, content: 'An error occurred processing the rep command.' });
-        }
+      // Log the rep change to mod log channel
+      const logChannel = interaction.guild.channels.cache.get(MOD_LOG_CHANNEL_ID);
+      if (logChannel)
+      {
+        logChannel.send({
+          content: `${actorMember.displayName} (${actorId}) has given ${amount > 0 ? 'positive' : 'negative'} reputation to ${targetMember.displayName} (${targetId}). New reputation: ${targetProfile.reputation}.`
+        });
+      }
+      else
+      {
+        console.warn('Mod log channel not found. Please set MOD_LOG_CHANNEL_ID in the config.');
+      }
     }
+    catch (err)
+    {
+      console.error(err);
+      return interaction.reply({ ephemeral: true, content: 'An error occurred processing the rep command.' });
+    }
+  }
 };
