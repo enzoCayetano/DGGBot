@@ -73,9 +73,9 @@ module.exports = {
 
       return interaction.reply({
         content: `You've claimed your daily reward of **${totalReward}** Riokens!\n` + 
-          `Base: ${baseReward}\n` + 
-          `Streak: ${streak} day(s)\n` + 
-          `Bonus: +${streakBonusPercent}\n` + 
+          `Base: **${baseReward}**\n` + 
+          `Streak: **${streak}** day(s)\n` + 
+          `Bonus: **+${streakBonusPercent}**\n` + 
           `You now have **${profile.points}** Riokens.`
       });
 
