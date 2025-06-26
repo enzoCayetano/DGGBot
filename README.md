@@ -21,6 +21,7 @@ Discord: https://discord.gg/DeadGirlGaming
 * ~~change pug embed colors~~ completed!
 * ~~add bank and rework economy~~ completed!
 * make profile beautiful
+* fix daily and add admin /rep reset command
 * implement work command !!
 * implement bank interest
 * implement tasks/missions?
@@ -33,6 +34,3 @@ Discord: https://discord.gg/DeadGirlGaming
 * implement inventory?
 * implement loan/lottery system for the bank
 * make admin panel + separate website
-
-
-* transition embeds to node canvas
