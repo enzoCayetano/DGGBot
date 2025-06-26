@@ -20,6 +20,7 @@ Discord: https://discord.gg/DeadGirlGaming
 * ~~MAJOR TODO: Document code before further use~~ completed!
 * ~~change pug embed colors~~ completed!
 * ~~add bank and rework economy~~ completed!
+* make profile beautiful
 * implement work command !!
 * implement bank interest
 * implement tasks/missions?

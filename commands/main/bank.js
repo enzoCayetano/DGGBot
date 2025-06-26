@@ -45,7 +45,7 @@ module.exports = {
         {
           return interaction.reply(
             `Bank Total: **${profile.bankBalance}** Riokens\n` + 
-            `Bank Level: Level ${profile.bankLevel}`
+            `Bank Level: **Level ${profile.bankLevel}**`
           );
         }
 
@@ -61,7 +61,7 @@ module.exports = {
           return interaction.reply(
             `Deposited **${amount}** Riokens into your bank!\n` + 
             `Bank Total: **${profile.bankBalance}** Riokens\n` + 
-            `Bank Level: Level ${profile.bankLevel}`
+            `Bank Level: **Level ${profile.bankLevel}**`
           );
         }
 
