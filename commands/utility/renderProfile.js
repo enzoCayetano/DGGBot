@@ -1,47 +1,72 @@
 const { createCanvas, loadImage, registerFont } = require('canvas');
+const roleTitles = require('../../json/roles.json')
 const path = require('path');
 
-// use optional font here later
+// import font
+registerFont(path.join(__dirname, '../../assets/fonts/poppin/Poppins-Regular.ttf'), {
+    family: 'Poppins Regular'
+});
 
 module.exports = async function renderProfileCard(profile, member)
 {
-    const width = 800;
-    const height = 600;
+    // Canvas settings
+    const width = 700;
+    const height = 300;
     const canvas = createCanvas(width, height);
     const ctx = canvas.getContext('2d');
 
     // Background
-    ctx.fillStyle = '#2c2f33'
+    const bgGradient = ctx.createLinearGradient(0, 0, 0, height);
+    bgGradient.addColorStop(0, '#232526');
+    bgGradient.addColorStop(1, '#414345');
+    ctx.fillStyle = bgGradient;
     ctx.fillRect(0, 0, width, height);
 
-    // Avatar
+    // Avatar settings
     const avatar = await loadImage(member.user.displayAvatarURL({ extension: 'png', size: 128 }));
-    ctx.drawImage(avatar, 30, 30, 100, 100);
+    const avatarSize = 100;
+    const avatarX = 30;
+    const avatarY = 30;
+
+    // Avatar
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(avatarX + avatarSize / 2, avatarY + avatarSize / 2, avatarSize / 2, 0, Math.PI * 2, true);
+    ctx.closePath();
+    ctx.clip();
+    ctx.drawImage(avatar, avatarX, avatarY, avatarSize, avatarSize);
+    ctx.restore();
 
     // Name & Title
     ctx.fillStyle = '#ffffff';
-    ctx.font = '30px sans-serif';
-    ctx.fillText(`${member.displayName}`, 150, 60);
-    ctx.font = '20px sans-serif';
+    ctx.font = '30px "Poppins"';
+    ctx.fillText(`${member.displayName} (${profile.username})`, 150, 60);
+    ctx.font = '20px "Poppins"';
     ctx.fillStyle = '#aaaaaa'
-    ctx.fillText(`Title: ${profile.title}`, 150, 90);
+    ctx.fillText(`${roleTitles[profile.title]?.title}`, 150, 90);
 
     // XP Bar
+    const xp = profile.xp;
+    const xpTotal = profile.xp + profile.xpToNextLevel;
     const xpPercent = profile.xpToNextLevel > 0 ? profile.xp / (profile.xp + profile.xpToNextLevel) : 1;
-    const barWidth = 500;
-    const barHeight = 20;
-    const barX = 150;
-    const barY = 120;
+    const xpBarWidth = 500;
+    const xpBarHeight = 20;
+    const xpBarX = 150;
+    const xpBarY = 100;
 
-    ctx.fillStyle = '#555';
-    ctx.fillRect(barX, barY, barWidth, barHeight);
+    ctx.fillStyle = '#333';
+    ctx.fillRect(xpBarX, xpBarY, xpBarWidth, xpBarHeight);
 
-    ctx.fillStyle = '#13ed5f';
-    ctx.fillRect(barX, barY, barWidth * xpPercent, barHeight);
+    ctx.fillStyle = '#00ff88';
+    ctx.fillRect(xpBarX, xpBarY, xpBarWidth * xpPercent, xpBarHeight);
 
-    ctx.fillStyle = '#ffffff';
-    ctx.font = '16px sans-serif';
-    ctx.fillText(`XP: ${profile.xp} / ${profile.xp + profile.xpToNextLevel}`, barX, barY - 10);
+    // XP Text
+    ctx.font = '16px "Poppins"';
+    ctx.fillStyle = '#ffffff'
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(`XP: ${xp} / ${xpTotal}`, xpBarX + xpBarWidth / 2, xpBarY + xpBarHeight / 2);
+    ctx.textAlign = 'start'; // reset alignment
 
     // Reputation bar config
     const repBarX = 150;
@@ -110,21 +135,27 @@ module.exports = async function renderProfileCard(profile, member)
         ctx.fill();
     }
 
-    // // Stats
-    // const stats = [
-    //     `Level: ${profile.level}`,
-    //     `Riokens: ${profile.points}`,
-    //     `Tournaments Won: ${profile.tournamentsWon}`,
-    //     `Joined: ${new Date(profile.joinedAt).toLocaleDateString()}`,
-    //     `Last Daily: ${profile.lastClaimed ? profile.lastClaimed.toLocaleDateString() : 'Never'}`
-    // ];
+    // Stats
+    const stats = [
+        ['Level', profile.level],
+        ['Riokens' ,profile.points],
+        ['Tournaments Won', profile.tournamentsWon],
+        ['Joined', new Date(profile.joinedAt).toLocaleDateString()],
+        ['Last Daily', profile.lastClaimed ? profile.lastClaimed.toLocaleDateString() : 'Never']
+    ];
 
-    // ctx.font = '18px sans-serif';
-    // ctx.fillStyle = '#ffffff'
+    ctx.font = '18px "Poppins"';
+    ctx.fillStyle = '#ffffff'
 
-    // stats.forEach((line, i) => {
-    //     ctx.fillText(line, 150, 170 + i * 25);
-    // });
+    const col1X = 150;
+    const col2X = 400;
+    const statsY = 140;
+
+    stats.forEach((stat, i) => {
+        const x = i < 5 ? col1X : col2X;
+        const y = statsY + (i % 5) * 24;
+        ctx.fillText(`${stat[0]}: ${stat[1]}`, x, y);
+    });
 
     return canvas.toBuffer();
 };
