@@ -33,6 +33,16 @@ function getLevelColor(level)
   return ['#aaaaaa', '#666666']; // gray tier
 }
 
+function getStatusColor(status) 
+{
+    switch (status) {
+        case 'online': return '#43b581';    // green
+        case 'idle': return '#faa61a';      // orange
+        case 'dnd': return '#f04747';       // red
+        case 'offline': default: return '#747f8d'; // gray
+    }
+}
+
 module.exports = async function renderProfileCard(profile, member)
 {
     // Canvas settings
@@ -54,11 +64,14 @@ module.exports = async function renderProfileCard(profile, member)
     const avatarX = 30;
     const avatarY = 30;
 
-    // Avatar outer border circle
+    // Avatar outer border circle based on status
+    const status = member.presence?.status || 'offline';
+    const statusColor = getStatusColor(status);
+
     ctx.save();
     ctx.beginPath();
     ctx.arc(avatarX + avatarSize / 2, avatarY + avatarSize / 2, avatarSize / 2 + 4, 0, Math.PI * 2);
-    ctx.fillStyle = '#ffffff';
+    ctx.fillStyle = statusColor;
     ctx.fill();
     ctx.closePath();
     ctx.restore();
@@ -116,27 +129,27 @@ module.exports = async function renderProfileCard(profile, member)
     const level = profile.level;
     const romanLevel = toRoman(level);
     const levelText = `${romanLevel}`;
-    const badgeX = width - 40;
-    const badgeY = 40;
-    const badgeRadius = 35;
 
     const [startColor, endColor] = getLevelColor(level);
-    const levelGradient = ctx.createLinearGradient(badgeX - badgeRadius, 0, badgeX + badgeRadius, 0);
+    const levelGradient = ctx.createLinearGradient(avatarX, avatarY, avatarX + 40, avatarY);
     levelGradient.addColorStop(0, startColor);
     levelGradient.addColorStop(1, endColor);
 
+    // Level shadow settings for glow effect
     ctx.save();
-    ctx.beginPath();
-    ctx.arc(badgeX, badgeY, badgeRadius, 0, Math.PI * 2);
-    ctx.fillStyle = '#111111';
-    ctx.fill();
+    ctx.font = '32px "Poppins"';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
+
+    // Stroke (outline)
+    ctx.lineWidth = 4;
+    ctx.strokeStyle = 'black';
+    ctx.strokeText(levelText, avatarX, avatarY);
+
+    // Fill (foreground gradient)
     ctx.fillStyle = levelGradient;
-    ctx.font = '36px "Poppins"';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(levelText, badgeX, badgeY);
+    ctx.fillText(levelText, avatarX, avatarY);
     ctx.restore();
-    ctx.textAlign = 'start'; //reset
 
     // Stats
     ctx.font = '16px "Poppins"';
