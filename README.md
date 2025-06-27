@@ -22,6 +22,7 @@ Discord: https://discord.gg/DeadGirlGaming
 * ~~add bank and rework economy~~ completed!
 * make profile beautiful
 * fix daily and add admin /rep reset command
+* add admin /xp add command
 * implement work command !!
 * implement bank interest
 * implement tasks/missions?
