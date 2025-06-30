@@ -152,17 +152,10 @@ module.exports = async function renderProfileCard(profile, member)
     ctx.restore();
 
     // Stats
-    ctx.font = '16px "Poppins"';
-    ctx.fillStyle = '#ffffff';
-    const stats = [
-        ['Riokens', profile.points],
-        ['Tournaments', profile.tournamentsWon],
-    ];
-
-    let statsY = 180;
-    stats.forEach(([label, val], i) => {
-        ctx.fillText(`${label}: ${val}`, 150, statsY + i * 24);
-    });
+    let statsY = 160;
+    ctx.font = '32px "Poppins"';
+    ctx.fillText(`💰 ${profile.points}`, 150, statsY);
+    ctx.fillText(`🏆 ${profile.tournamentsWon}`, 150, statsY + 48);
 
     // Reputation bar config
     const repBarWidth = 500;
