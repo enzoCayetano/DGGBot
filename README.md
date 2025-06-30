@@ -20,8 +20,8 @@ Discord: https://discord.gg/DeadGirlGaming
 * ~~MAJOR TODO: Document code before further use~~ completed!
 * ~~change pug embed colors~~ completed!
 * ~~add bank and rework economy~~ completed!
-* make profile beautiful
-* fix daily and add admin /rep reset command
+* ~~make profile beautiful~~ completed (for now)!
+* add admin /rep reset command
 * add admin /xp add command
 * implement work command !!
 * implement bank interest
