@@ -1,13 +1,6 @@
-const {
-  SlashCommandBuilder,
-  ModalBuilder,
-  TextInputBuilder,
-  TextInputStyle,
-  ActionRowBuilder
-} = require('discord.js');
+const { SlashCommandBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder } = require('discord.js');
 
 module.exports = {
-  // Slash command definition
   data: new SlashCommandBuilder()
     .setName('announce')
     .setDescription('Announce a message using the bot.')
