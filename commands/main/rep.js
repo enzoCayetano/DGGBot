@@ -10,27 +10,34 @@ module.exports = {
     .setName('rep')
     .setDescription('Give reputation to a user.')
     .addSubcommand(sub =>
-        sub.setName('up')
-            .setDescription('Give positive reputation to a user.')
-            .addUserOption(option =>
-                option.setName('target')
-                    .setDescription('The user to give reputation to.')
-                    .setRequired(true)))
+      sub.setName('up')
+        .setDescription('Give positive reputation to a user.')
+        .addUserOption(option =>
+          option.setName('target')
+            .setDescription('The user to give reputation to.')
+            .setRequired(true)))
     .addSubcommand(sub =>
-        sub.setName('down')
-            .setDescription('Give negative reputation to a user.')
-            .addUserOption(option =>
-                option.setName('target')
-                    .setDescription('The user to give reputation to.')
-                    .setRequired(true)))
+      sub.setName('down')
+        .setDescription('Give negative reputation to a user.')
+        .addUserOption(option =>
+          option.setName('target')
+            .setDescription('The user to give reputation to.')
+            .setRequired(true)))
     .addSubcommand(sub =>
-        sub.setName('check')
-            .setDescription('Check your reputation or another user\'s reputation.')
-            .addUserOption(option =>
-                option.setName('target')
-                    .setDescription('The user to check reputation for.')
-                    .setRequired(false))),
-                    
+      sub.setName('check')
+        .setDescription('Check your reputation or another user\'s reputation.')
+        .addUserOption(option =>
+          option.setName('target')
+            .setDescription('The user to check reputation for.')
+            .setRequired(false)))
+    .addSubcommand(sub =>
+      sub.setName('reset')
+        .setDescription('Reset user reputation to 0.')
+        .addUserOption(option =>
+          option.setName('target')
+            .setDescription('The user to check reputation for.')
+            .setRequired(false))),
+  requiredRoles: ['1237571670261371011', '1275018612922384455'],
   async execute(interaction)
   {
     try
@@ -155,6 +162,49 @@ module.exports = {
       else
       {
         console.warn('Mod log channel not found. Please set MOD_LOG_CHANNEL_ID in the config.');
+      }
+
+      // Rep reset
+      if (sub === 'reset')
+      {
+        // Check for required role
+        const userHasRequiredRole = interaction.member.roles.cache.some(role =>
+          this.requiredRoles.includes(role.id)
+        );
+
+        if (!userHasRequiredRole) 
+        {
+          return interaction.reply({
+            content: 'You do not have permission to use this command.',
+            ephemeral: true
+          });
+        }
+
+        if (targetProfile.reputation === 0)
+        {
+          return interaction.reply({
+            content: `${targetMember.displayName}'s reputation is already at 0.`,
+            ephemeral: true
+          });
+        }
+
+        const oldRep = targetProfile.reputation;
+        targetProfile.reputation = 0;
+        await targetProfile.save();
+
+        await interaction.reply({
+          content: `${targetMember.displayName}'s reputation has been reset from ${oldRep} to 0.`,
+          ephemeral: true
+        });
+
+        const logChannel = interaction.guild.channels.cache.get(MOD_LOG_CHANNEL_ID);
+        if (logChannel)
+        {
+          logChannel.send({
+            content: `${interaction.user.displayName} (${interaction.user.id}) has reset the reputation of ${targetMember.displayName} (${targetId}) from ${oldRep} to 0.`
+          })
+        }
+        return;
       }
     }
     catch (err)
