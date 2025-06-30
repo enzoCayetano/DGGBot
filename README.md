@@ -21,8 +21,8 @@ Discord: https://discord.gg/DeadGirlGaming
 * ~~change pug embed colors~~ completed!
 * ~~add bank and rework economy~~ completed!
 * ~~make profile beautiful~~ completed (for now)!
-* add admin /rep reset command
-* add admin /xp add command
+* ~~add admin /rep reset command~~ completed!
+* add admin /xp add/subtract and /level add/subtract command for admins
 * implement work command !!
 * implement bank interest
 * implement tasks/missions?
