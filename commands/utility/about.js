@@ -6,6 +6,14 @@ module.exports = {
     .setDescription('About this bot!'),
   async execute(interaction)
   {
-    await interaction.reply('This bot was programmed by swag.');
+    const client = interaction.client;
+    const guilds = client.guilds.cache.map(g => g.name).join('\n');
+
+    const response = `**Servers I'm in:**\n${guilds}`;
+    
+    await interaction.reply({
+      content: response.length < 2000 ? response : "I'm in too many servers to list here.",
+      ephemeral: true,
+    });
   },
 };
