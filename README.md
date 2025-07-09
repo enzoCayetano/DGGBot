@@ -35,3 +35,5 @@ Discord: https://discord.gg/DeadGirlGaming
 * implement inventory?
 * implement loan/lottery system for the bank
 * make admin panel + separate website
+
+* Development will be completely stopped due to since cutting ties with Dead Girl Gaming.
